@@ -22,20 +22,22 @@ public class Author {
 	}
 
 	public void setAuthorName(String authorName) {
-		if (id == null || id.equals("")){
-			id = new ObjectId().toString();
-		}
+		checkAndPopulateId();
 		this.authorName = authorName;
 	}
-	
-	public Author(){
-		
+
+	public Author() {
+
 	}
-	
-	public Author(String authorName){
-		if (id == null || id.equals("")){
+
+	public Author(String authorName) {
+		checkAndPopulateId();
+		this.authorName = authorName;
+	}
+
+	public void checkAndPopulateId() {
+		if (id == null || id.equals("")) {
 			id = new ObjectId().toString();
 		}
-		this.authorName = authorName;
 	}
 }

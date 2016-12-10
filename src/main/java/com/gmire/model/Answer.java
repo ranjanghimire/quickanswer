@@ -8,18 +8,31 @@ public class Answer {
 	@Id
 	private String id;
 	private String mainAnswer;
+	private Author author;
 
-	public Answer(){
-		
+	public Author getAuthor() {
+		return author;
 	}
-	
-	public Answer (String mainAnswer){
-		if (id == null || id.equals("")){
-			id = new ObjectId().toString();
-		}
+
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+
+	public Answer() {
+
+	}
+
+	public Answer(String mainAnswer) {
+		checkAndPopulateId();
 		this.mainAnswer = mainAnswer;
 	}
-	
+
+	public Answer(String mainAnswer, Author author) {
+		checkAndPopulateId();
+		this.mainAnswer = mainAnswer;
+		this.author = author;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -33,9 +46,13 @@ public class Answer {
 	}
 
 	public void setMainAnswer(String mainAnswer) {
-		if (id == null || id.equals("")){
+		checkAndPopulateId();
+		this.mainAnswer = mainAnswer;
+	}
+
+	public void checkAndPopulateId() {
+		if (id == null || id.equals("")) {
 			id = new ObjectId().toString();
 		}
-		this.mainAnswer = mainAnswer;
 	}
 }
