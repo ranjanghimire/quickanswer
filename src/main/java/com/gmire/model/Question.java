@@ -13,7 +13,62 @@ public class Question {
 
 	private List<Answer> answers;
 
+	// user who asked the question. The current user who asks the question is
+	// the author
 	private Author author;
+
+	private Long weight;
+
+	private String topic;
+
+	private List<String> tags;
+
+	// if any of the answer has been verified
+	private boolean hasVerifiedAnswer;
+
+	// if any of the answer is reported by some user as true and verified.
+	// These are candidates for review and to set as hasVerifiedAnswer
+	private boolean hasAcceptedAnswer;
+
+	public boolean isHasVerifiedAnswer() {
+		return hasVerifiedAnswer;
+	}
+
+	public void setHasVerifiedAnswer(boolean hasVerifiedAnswer) {
+		this.hasVerifiedAnswer = hasVerifiedAnswer;
+	}
+
+	public boolean isHasAcceptedAnswer() {
+		return hasAcceptedAnswer;
+	}
+
+	public void setHasAcceptedAnswer(boolean hasAcceptedAnswer) {
+		this.hasAcceptedAnswer = hasAcceptedAnswer;
+	}
+
+	public Long getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Long weight) {
+		this.weight = weight;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
 	public String getId() {
 		return id;
@@ -50,12 +105,12 @@ public class Question {
 	public Question() {
 
 	}
-	
-	public Question(String question){
+
+	public Question(String question) {
 		mainQuestion = question;
 	}
-	
-	public Question(String question, Author author){
+
+	public Question(String question, Author author) {
 		mainQuestion = question;
 		this.author = author;
 	}

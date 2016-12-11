@@ -7,8 +7,42 @@ public class Answer {
 
 	@Id
 	private String id;
+
 	private String mainAnswer;
+
 	private Author author;
+
+	private Long weight;
+
+	//whether or not the answer is marked by some user to be accepted as a verified answer
+	private boolean isMarkedForAcceptance;
+
+	//After review, the answer can be marked as verified. 
+	private boolean isVerifiedAnswer;
+
+	public boolean isMarkedForAcceptance() {
+		return isMarkedForAcceptance;
+	}
+
+	public void setMarkedForAcceptance(boolean isMarkedForAcceptance) {
+		this.isMarkedForAcceptance = isMarkedForAcceptance;
+	}
+
+	public boolean isVerifiedAnswer() {
+		return isVerifiedAnswer;
+	}
+
+	public void setVerifiedAnswer(boolean isVerifiedAnswer) {
+		this.isVerifiedAnswer = isVerifiedAnswer;
+	}
+
+	public Long getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Long weight) {
+		this.weight = weight;
+	}
 
 	public Author getAuthor() {
 		return author;

@@ -1,13 +1,13 @@
 package com.gmire.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 public class Author {
 
 	@Id
 	private String id;
-	private String authorName;
+
+	private String appUserId;
 
 	public String getId() {
 		return id;
@@ -17,27 +17,16 @@ public class Author {
 		this.id = id;
 	}
 
-	public String getAuthorName() {
-		return authorName;
+	public String getAppUserId() {
+		return appUserId;
 	}
 
-	public void setAuthorName(String authorName) {
-		checkAndPopulateId();
-		this.authorName = authorName;
+	public void setAppUserId(String appUserId) {
+		this.appUserId = appUserId;
 	}
 
 	public Author() {
 
 	}
 
-	public Author(String authorName) {
-		checkAndPopulateId();
-		this.authorName = authorName;
-	}
-
-	public void checkAndPopulateId() {
-		if (id == null || id.equals("")) {
-			id = new ObjectId().toString();
-		}
-	}
 }
