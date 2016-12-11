@@ -17,11 +17,17 @@ public class Question {
 	// the author
 	private Author author;
 
+	//Anytime the question is upvoted or viewed, etc., the weight goes up.
+	//Also, questions asked by higher weight user has higher weight. 
 	private Long weight;
-
+	
 	private String topic;
 
 	private List<String> tags;
+
+	private boolean isLocationSpecific;
+
+	private List<Address> relevantLocations;
 
 	// if any of the answer has been verified
 	private boolean hasVerifiedAnswer;
@@ -29,6 +35,22 @@ public class Question {
 	// if any of the answer is reported by some user as true and verified.
 	// These are candidates for review and to set as hasVerifiedAnswer
 	private boolean hasAcceptedAnswer;
+
+	public boolean isLocationSpecific() {
+		return isLocationSpecific;
+	}
+
+	public void setLocationSpecific(boolean isLocationSpecific) {
+		this.isLocationSpecific = isLocationSpecific;
+	}
+
+	public List<Address> getRelevantLocations() {
+		return relevantLocations;
+	}
+
+	public void setRelevantLocations(List<Address> relevantLocations) {
+		this.relevantLocations = relevantLocations;
+	}
 
 	public boolean isHasVerifiedAnswer() {
 		return hasVerifiedAnswer;

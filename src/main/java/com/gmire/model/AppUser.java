@@ -16,12 +16,49 @@ public class AppUser {
 
 	private Address address;
 
+	// Anytime a user is vouched, the weight goes up bigly.
+	// Anytime he answers a question, the weight goes up
+	// Anytime his answer is accepted and verified, weight goes up bigly.
 	private Long weight;
+
+	// how many times this user has been vouched by others
+	private Long vouchCount;
+
+	public Long getVouchCount() {
+		return vouchCount;
+	}
+
+	public void setVouchCount(Long vouchCount) {
+		this.vouchCount = vouchCount;
+	}
+
+	public List<AppUser> getVouchedByUsers() {
+		return vouchedByUsers;
+	}
+
+	public void setVouchedByUsers(List<AppUser> vouchedByUsers) {
+		this.vouchedByUsers = vouchedByUsers;
+	}
+
+	// users who have vouched this guy.
+	private List<AppUser> vouchedByUsers;
 
 	private List<Date> loginTime;
 
+	// All the questions with tags he has liked, upvoted, etc.
 	private List<String> desiredTags;
-	
+
+	// All the topics he has liked, upvoted, etc.
+	private List<String> desiredTopics;
+
+	public List<String> getDesiredTopics() {
+		return desiredTopics;
+	}
+
+	public void setDesiredTopics(List<String> desiredTopics) {
+		this.desiredTopics = desiredTopics;
+	}
+
 	private List<String> typedSearches;
 
 	public List<String> getTypedSearches() {
