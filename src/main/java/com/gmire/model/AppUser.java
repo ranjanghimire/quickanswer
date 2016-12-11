@@ -1,5 +1,6 @@
 package com.gmire.model;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,16 @@ public class AppUser {
 	private Address address;
 	
 	private Long weight;
+	
+	private List<Date> loginTime;
+
+	public List<Date> getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(List<Date> loginTime) {
+		this.loginTime = loginTime;
+	}
 
 	public Long getWeight() {
 		return weight;
