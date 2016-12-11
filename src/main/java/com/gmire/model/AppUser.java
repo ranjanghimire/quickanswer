@@ -16,6 +16,21 @@ public class AppUser {
 
 	private Address address;
 
+	private List<String> askedQuestionsIDs;
+
+	private List<String> repliedAnswersIDs;
+
+	// users who have vouched this guy.
+	private List<AppUser> vouchedByUsers;
+
+	private List<Date> loginTime;
+
+	// All the questions with tags he has liked, upvoted, etc.
+	private List<String> desiredTags;
+
+	// All the topics he has liked, upvoted, etc.
+	private List<String> desiredTopics;
+
 	// Anytime a user is vouched, the weight goes up bigly.
 	// Anytime he answers a question, the weight goes up
 	// Anytime his answer is accepted and verified, weight goes up bigly.
@@ -39,17 +54,6 @@ public class AppUser {
 	public void setVouchedByUsers(List<AppUser> vouchedByUsers) {
 		this.vouchedByUsers = vouchedByUsers;
 	}
-
-	// users who have vouched this guy.
-	private List<AppUser> vouchedByUsers;
-
-	private List<Date> loginTime;
-
-	// All the questions with tags he has liked, upvoted, etc.
-	private List<String> desiredTags;
-
-	// All the topics he has liked, upvoted, etc.
-	private List<String> desiredTopics;
 
 	public List<String> getDesiredTopics() {
 		return desiredTopics;
@@ -108,10 +112,6 @@ public class AppUser {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-
-	private List<String> askedQuestionsIDs;
-
-	private List<String> repliedAnswersIDs;
 
 	public String getId() {
 		return Id;
