@@ -2,8 +2,12 @@ package com.gmire.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gmire.model.Answer;
 import com.gmire.model.Question;
 import com.gmire.repository.QuestionRepository;
 
@@ -43,6 +47,31 @@ public class QuestionService {
 			return null;
 		}
 		Question updateQuestion = qRepo.save(question);
+		return updateQuestion;
+	}
+
+	public Question addAnswersForQuestionId(String id, Answer answer) {
+		// TODO Auto-generated method stub
+		Question questionPersisted = qRepo.findOne(id);
+		if (questionPersisted == null) {
+			return null;
+		}
+
+		if (answer.getId() == null) {
+			answer.setId(new ObjectId().toString());
+		}
+
+		//If the list of answers is empty, it will throw NPE
+		if (questionPersisted.getAnswers() == null) {
+			List<Answer> ans = new ArrayList<Answer>();
+			ans.add(answer);
+			questionPersisted.setAnswers(ans);
+		} else {
+			questionPersisted.getAnswers().add(answer);
+		}
+
+		Question updateQuestion = qRepo.save(questionPersisted);
+
 		return updateQuestion;
 	}
 

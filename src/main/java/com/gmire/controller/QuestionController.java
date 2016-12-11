@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.gmire.model.Question;
-import com.gmire.repository.QuestionRepository;
+import com.gmire.service.AnswerService;
 import com.gmire.service.QuestionService;
 
 @RestController("/")
@@ -22,20 +23,19 @@ public class QuestionController {
 	QuestionService questionService;
 
 	@Autowired
-	QuestionRepository qRepo;
-	
-	//Update a question
-	@RequestMapping(value="question/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Question> updateGreeting(@RequestBody Question question){
+	AnswerService answerService;
+
+	// Update a question
+	@RequestMapping(value = "question/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
 		Question updateQuestion = questionService.update(question);
 		if (updateQuestion == null) {
-			return new ResponseEntity<Question> (HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		return new ResponseEntity<Question> (updateQuestion, HttpStatus.OK);
+		return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
 	}
 
-	//Delete All Questions
+	// Delete All Questions
 	@RequestMapping(value = "question", method = RequestMethod.DELETE)
 	public ResponseEntity<Question> deleteAllQuestions() {
 		questionService.deleteAll();
@@ -54,6 +54,7 @@ public class QuestionController {
 	public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
 		Question savedQuestion = questionService.create(question);
 		return new ResponseEntity<Question>(savedQuestion, HttpStatus.CREATED);
+		// TODO: Also update user's statistics
 	}
 
 	// Find all questions
