@@ -15,10 +15,22 @@ public class AppUser {
 	private String fullName;
 
 	private Address address;
-	
+
 	private Long weight;
-	
+
 	private List<Date> loginTime;
+
+	private List<String> desiredTags;
+	
+	private List<String> typedSearches;
+
+	public List<String> getTypedSearches() {
+		return typedSearches;
+	}
+
+	public void setTypedSearches(List<String> typedSearches) {
+		this.typedSearches = typedSearches;
+	}
 
 	public List<Date> getLoginTime() {
 		return loginTime;
@@ -35,8 +47,6 @@ public class AppUser {
 	public void setWeight(Long weight) {
 		this.weight = weight;
 	}
-
-	private List<String> desiredTags;
 
 	public List<String> getDesiredTags() {
 		return desiredTags;
