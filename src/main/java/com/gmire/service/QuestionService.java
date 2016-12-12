@@ -52,7 +52,6 @@ public class QuestionService {
 	}
 
 	public Question addAnswersForQuestionId(String id, Answer answer) {
-		// TODO Auto-generated method stub
 		Question questionPersisted = qRepo.findOne(id);
 		if (questionPersisted == null) {
 			return null;
@@ -90,6 +89,33 @@ public class QuestionService {
 			Answer remAns = (Answer) itr.next();
 			if (remAns.getId().equals(answerId)) {
 				itr.remove();
+				break;
+			}
+		}
+
+		Question retQuestion = qRepo.save(question);
+
+		return retQuestion;
+	}
+
+	public Question updateAnswerforQuestionId(String questionId, Answer answer) {
+
+		Question question = qRepo.findById(questionId);
+
+		if (question == null) {
+			return null;
+		}
+
+		Iterator<Answer> itr = question.getAnswers().iterator();
+
+		String answerId = answer.getId();
+
+		while (itr.hasNext()) {
+			Answer remAns = (Answer) itr.next();
+			if (remAns.getId().equals(answerId)) {
+				itr.remove();
+				answer.setId(answerId);
+				question.getAnswers().add(answer);
 				break;
 			}
 		}
