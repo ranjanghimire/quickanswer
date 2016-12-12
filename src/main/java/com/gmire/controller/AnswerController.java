@@ -47,4 +47,19 @@ public class AnswerController {
 			List<Answer> answer = answerService.findAll(id);
 			return new ResponseEntity<List<Answer>>(answer, HttpStatus.OK);
 		}
+		
+		// delete an answer for a given question
+		@RequestMapping(value="/question/{questionid}/answers/{answerid}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Question> deleteAnswersForQuestionId(@PathVariable("questionid") String questionId, @PathVariable("answerid") String answerId){
+			
+			Question retQuestion = questionService.deleteAnswerForQuestion(questionId, answerId);
+			
+			if (retQuestion == null){
+				return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			return new ResponseEntity<Question>(retQuestion, HttpStatus.OK);
+		}
+		
+		//TODO: Add APIs for updating an answer
 }

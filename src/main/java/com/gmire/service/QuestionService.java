@@ -1,6 +1,7 @@
 package com.gmire.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -61,7 +62,7 @@ public class QuestionService {
 			answer.setId(new ObjectId().toString());
 		}
 
-		//If the list of answers is empty, it will throw NPE
+		// If the list of answers is empty, it will throw NPE
 		if (questionPersisted.getAnswers() == null) {
 			List<Answer> ans = new ArrayList<Answer>();
 			ans.add(answer);
@@ -73,6 +74,29 @@ public class QuestionService {
 		Question updateQuestion = qRepo.save(questionPersisted);
 
 		return updateQuestion;
+	}
+
+	public Question deleteAnswerForQuestion(String questionId, String answerId) {
+
+		Question question = qRepo.findById(questionId);
+
+		if (question == null) {
+			return null;
+		}
+
+		Iterator<Answer> itr = question.getAnswers().iterator();
+
+		while (itr.hasNext()) {
+			Answer remAns = (Answer) itr.next();
+			if (remAns.getId().equals(answerId)) {
+				itr.remove();
+				break;
+			}
+		}
+
+		Question retQuestion = qRepo.save(question);
+
+		return retQuestion;
 	}
 
 }
