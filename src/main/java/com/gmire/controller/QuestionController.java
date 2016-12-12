@@ -69,7 +69,7 @@ public class QuestionController {
 
 	// Search by particular question
 	@RequestMapping(value = "question/{question}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Question>> findByMainQuestion(@PathVariable String question) {
+	public ResponseEntity<List<Question>> findByMainQuestion(@PathVariable("question") String question) {
 
 		List<Question> retQuestion = questionService.findByMainQuestionIgnoreCaseLike(question);
 
