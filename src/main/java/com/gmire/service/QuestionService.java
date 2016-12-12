@@ -125,4 +125,19 @@ public class QuestionService {
 		return retQuestion;
 	}
 
+	public Question deleteAllAnswersForQuestionId(String questionId) {
+		
+		Question question = qRepo.findById(questionId);
+
+		if (question == null) {
+			return null;
+		}
+		
+		question.getAnswers().clear();
+		
+		Question retQuestion = qRepo.save(question);
+
+		return retQuestion;
+	}
+
 }

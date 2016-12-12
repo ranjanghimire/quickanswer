@@ -61,8 +61,21 @@ public class AnswerController {
 
 		return new ResponseEntity<Question>(retQuestion, HttpStatus.OK);
 	}
+	
+	//delete all answers to a given question
+	@RequestMapping(value = "/question/{questionid}/answers", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Question> deleteAllAnswersForQuestionId(@PathVariable("questionid") String questionId){
+		
+		Question retQuestion = questionService.deleteAllAnswersForQuestionId(questionId);
+		
+		if (retQuestion == null) {
+			return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-	// TODO: Add APIs for updating an answer
+		return new ResponseEntity<Question>(retQuestion, HttpStatus.OK);
+	}
+
+	//Update an existing answer to a question
 	@RequestMapping(value = "/question/{questionid}/answers", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Question> updateAnswersForQuestionId(@PathVariable("questionid") String questionId, @RequestBody Answer answer) {
 
