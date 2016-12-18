@@ -14,4 +14,6 @@ public interface AppUserRepository extends PagingAndSortingRepository<AppUser, S
 
 	public List<AppUser> findByUserNameIgnoreCaseLike(String userName);
 	
+	public AppUser findByUserNameAndPassword(String userName, String password);
+	
 }

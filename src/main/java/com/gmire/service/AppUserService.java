@@ -55,4 +55,14 @@ public class AppUserService {
 		return retList;
 	}
 
+	public AppUser findByUserNameAndPassword(String userName, String password) {
+		AppUser retUser =  appUserRepository.findByUserNameAndPassword(userName, password);
+		
+		if (retUser == null){
+			return null;
+		}
+		
+		return retUser;
+	}
+
 }

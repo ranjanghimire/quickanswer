@@ -11,6 +11,8 @@ public class AppUser {
 	private String id;
 
 	private String userName;
+	
+	private String password;
 
 	private String fullName;
 
@@ -38,6 +40,16 @@ public class AppUser {
 
 	// how many times this user has been vouched by others
 	private Long vouchCount;
+
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public Long getVouchCount() {
 		return vouchCount;
