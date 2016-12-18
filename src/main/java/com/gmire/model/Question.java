@@ -21,6 +21,8 @@ public class Question {
 	//Also, questions asked by higher weight user has higher weight. 
 	private Long weight;
 	
+	private Long votes;
+	
 	private String topic;
 
 	private List<String> tags;
@@ -35,6 +37,15 @@ public class Question {
 	// if any of the answer is reported by some user as true and verified.
 	// These are candidates for review and to set as hasVerifiedAnswer
 	private boolean hasAcceptedAnswer;
+	
+
+	public Long getVotes() {
+		return votes;
+	}
+
+	public void setVotes(Long votes) {
+		this.votes = votes;
+	}
 
 	public boolean isLocationSpecific() {
 		return isLocationSpecific;

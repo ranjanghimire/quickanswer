@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gmire.model.Answer;
+import com.gmire.model.Author;
 import com.gmire.model.Question;
 import com.gmire.repository.QuestionRepository;
 
@@ -17,6 +18,9 @@ public class QuestionService {
 
 	@Autowired
 	private QuestionRepository qRepo;
+	
+	@Autowired
+	private AuthorService authorService;
 
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question) {
 		List<Question> retList = new ArrayList<Question>();
@@ -29,6 +33,20 @@ public class QuestionService {
 	}
 
 	public Question create(Question question) {
+		
+		//If id of author id is not present, search for Author with given appUserId
+		//If found, use existing author id. If not create a new objectId.
+		
+		if (question.getAuthor().getId() == null){
+			Author author = authorService.findOneByAppUserId(question.getAuthor().getAppUserId());
+			if (author != null){ //Create new object id and assign it to the author
+				question.getAuthor().setId(author.getId());
+			}
+			else{
+				question.getAuthor().setId(new ObjectId().toString());
+			}
+		}
+		
 		Question savedQuestion = qRepo.save(question);
 		return savedQuestion;
 	}
