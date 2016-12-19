@@ -65,4 +65,19 @@ public class AppUserService {
 		return retUser;
 	}
 
+	//update user's password. The user must exist at first place.
+	public AppUser updateUserPassword(String userName, String password) {
+		AppUser retUser = appUserRepository.findByUserName(userName);
+		
+		if (retUser == null){
+			return null;
+		}
+		
+		retUser.setPassword(password);
+		
+		retUser = appUserRepository.save(retUser);
+		
+		return retUser;
+	}
+
 }

@@ -21,6 +21,23 @@ public class AppUserController {
 	@Autowired
 	private AppUserService appUserService;
 
+	//Update user's password by username
+	@RequestMapping(value="/user/{username}/{password}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppUser> updatePassword(@PathVariable("username") String userName, @PathVariable("password")String password){
+		
+		if (userName.equals("") || userName == null || password.equals("") || password == null){
+			return new ResponseEntity<AppUser>(HttpStatus.NOT_FOUND);
+		}
+		
+		AppUser retUser = appUserService.updateUserPassword(userName, password);
+		
+		if (retUser == null) {
+			return new ResponseEntity<AppUser>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<AppUser>(retUser, HttpStatus.OK);
+	}
+	
 	//Authenticate a username with the provided password
 	//Return the user if it exists, otherwise NOT FOUND	
 	@RequestMapping(value = "/user/{username}/{password}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
