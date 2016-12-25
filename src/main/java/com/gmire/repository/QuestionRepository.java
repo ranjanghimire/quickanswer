@@ -11,6 +11,8 @@ import com.gmire.model.Question;
 public interface QuestionRepository extends PagingAndSortingRepository<Question, String> {
 
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question);
+	
+	public List<Question> findByTopicIgnoreCase(String topic);
 
 	public List<Question> findAll();
 

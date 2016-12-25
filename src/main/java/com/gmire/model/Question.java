@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Question {
 
+	//TODO: Add timestamp to store time of question asked
+	
 	@Id
 	private String id;
 
@@ -30,6 +34,11 @@ public class Question {
 	private boolean isLocationSpecific;
 
 	private List<Address> relevantLocations;
+	
+	private boolean isLiked;
+	
+	@JsonIgnore
+	private List<String> likedByUserIDs; 
 
 	// if any of the answer has been verified
 	private boolean hasVerifiedAnswer;
@@ -38,6 +47,22 @@ public class Question {
 	// These are candidates for review and to set as hasVerifiedAnswer
 	private boolean hasAcceptedAnswer;
 	
+	
+	public boolean isLiked() {
+		return isLiked;
+	}
+
+	public void setLiked(boolean isLiked) {
+		this.isLiked = isLiked;
+	}
+
+	public List<String> getLikedByUserIDs() {
+		return likedByUserIDs;
+	}
+
+	public void setLikedByUserIDs(List<String> likedByUserIDs) {
+		this.likedByUserIDs = likedByUserIDs;
+	}
 
 	public Long getVotes() {
 		return votes;
@@ -136,7 +161,6 @@ public class Question {
 	}
 
 	public Question() {
-
 	}
 
 	public Question(String question) {

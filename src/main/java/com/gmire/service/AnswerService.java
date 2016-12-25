@@ -21,4 +21,13 @@ public class AnswerService {
 		return answers;
 	}
 
+	public Answer findOne(String questionId) {
+		
+		//TODO: Handle errors if id is null
+		
+		Answer answer = qRepo.findOne(questionId).getAnswers().get(0);
+
+		return answer;
+	}
+
 }

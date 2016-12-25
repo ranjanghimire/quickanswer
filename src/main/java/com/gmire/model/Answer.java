@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 
 public class Answer {
 
+	//TODO: Add timestamp to store time of answer.
+	
 	@Id
 	private String id;
 

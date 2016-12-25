@@ -38,7 +38,6 @@ public class AnswerController {
 
 		return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
 		// TODO: Also, update User's statistics on the fly
-
 	}
 
 	// Get all answers for a given question
@@ -47,6 +46,17 @@ public class AnswerController {
 		List<Answer> answer = answerService.findAll(id);
 		return new ResponseEntity<List<Answer>>(answer, HttpStatus.OK);
 	}
+	
+	// Get just 1 answer for a given question
+	// If answerList has verified answer, return that
+	// else return the first random answer
+	@RequestMapping(value="/question/{id}/answer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Answer> getOneAnswerForGivenQuestion(@PathVariable("id") String id){
+		Answer answer = answerService.findOne(id);
+		return new ResponseEntity<Answer> (answer, HttpStatus.OK);
+	}
+	
+	
 
 	// delete an answer for a given question
 	@RequestMapping(value = "/question/{questionid}/answers/{answerid}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

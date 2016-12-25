@@ -52,6 +52,19 @@ public class AppUserController {
 		return new ResponseEntity<AppUser>(retUser, HttpStatus.OK);
 	}
 	
+	//Retrieve a username by provided appUserId
+	@RequestMapping(value = "/user/userId/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppUser> findOneByUserId(@PathVariable("id") String id){
+		
+		AppUser retUser = appUserService.findOneByUserId(id);
+		
+		if (retUser == null){
+			return new ResponseEntity<AppUser>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<AppUser>(retUser, HttpStatus.OK);
+	}
+	
 	//Search user by username
 	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AppUser>> findByUserName(@PathVariable("username") String userName) {

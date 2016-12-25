@@ -25,6 +25,15 @@ public class QuestionController {
 	@Autowired
 	AnswerService answerService;
 
+	//Increment likes in a question
+	@RequestMapping(value="question/userid/{userId}", method=RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Question> incrementLikesOfQuestion(@RequestBody Question question, @PathVariable("userId") String userId){
+		
+		Question incQuestion = questionService.incrementLikes(question, userId);	
+		
+		return new ResponseEntity<Question>(incQuestion, HttpStatus.OK);
+	}
+	
 	// Update a question
 	@RequestMapping(value = "question/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
@@ -64,6 +73,7 @@ public class QuestionController {
 		if (retQuestion == null) {
 			return new ResponseEntity<List<Question>>(HttpStatus.NOT_FOUND);
 		}
+		
 		return new ResponseEntity<List<Question>>(retQuestion, HttpStatus.OK);
 	}
 
@@ -77,6 +87,18 @@ public class QuestionController {
 			return new ResponseEntity<List<Question>>(HttpStatus.NOT_FOUND);
 		}
 
+		return new ResponseEntity<List<Question>>(retQuestion, HttpStatus.OK);
+	}
+	
+	//Find all questions by Topic
+	@RequestMapping(value="question/topic/{topic}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Question>> findByTopic(@PathVariable("topic") String topic){
+		List<Question> retQuestion = questionService.findByTopicIgnoreCase(topic);
+		
+		if (retQuestion == null){
+			return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+		}
+		
 		return new ResponseEntity<List<Question>>(retQuestion, HttpStatus.OK);
 	}
 

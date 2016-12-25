@@ -80,4 +80,15 @@ public class AppUserService {
 		return retUser;
 	}
 
+	public AppUser findOneByUserId(String id) {
+
+		AppUser retUser = appUserRepository.findOne(id);
+		
+		if (retUser == null){ 
+			return null;
+		}
+		
+		return retUser;
+	}
+
 }
