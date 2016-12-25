@@ -207,4 +207,15 @@ public class QuestionService {
 		//return the updated question.
 	}
 
+	public List<Question> findByIdIn(List<String> askedQuestionsIDs) {
+
+		if (askedQuestionsIDs == null || askedQuestionsIDs.isEmpty()){
+			return null;
+		}
+		
+		List<Question> retQuestions = qRepo.findByIdIn(askedQuestionsIDs);
+		
+		return retQuestions;
+	}
+
 }

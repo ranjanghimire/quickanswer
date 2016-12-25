@@ -18,4 +18,6 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
 	public Question findById(String questionId);
 
+	public List<Question> findByIdIn(List<String> askedQuestionsIDs);
+
 }
