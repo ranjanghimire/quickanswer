@@ -21,6 +21,7 @@ public class QuestionService {
 
 	@Autowired
 	private AuthorService authorService;
+	
 
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question) {
 		List<Question> retList = new ArrayList<Question>();
@@ -217,5 +218,6 @@ public class QuestionService {
 		
 		return retQuestions;
 	}
+
 
 }

@@ -55,7 +55,7 @@ public class QuestionControllerV2 {
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
 
-		//TODO: Find all questions asked by a given user
+		//Find all questions asked by a given user
 		@RequestMapping(value = "/v2/question/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllAskedByThisUser(@PathVariable("userId") String userId) {
 			
@@ -73,7 +73,6 @@ public class QuestionControllerV2 {
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
-		
 		
 		//Create a new question and update id into AppUser
 		@RequestMapping(value = "/v2/question/userid/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
