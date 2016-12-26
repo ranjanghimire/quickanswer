@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.gmire.model.Answer;
 import com.gmire.model.AppUser;
@@ -18,6 +19,7 @@ import com.gmire.model.Question;
 import com.gmire.repository.AppUserRepository;
 import com.gmire.service.QuestionService;
 
+@RestController
 public class AnswerControllerV2 {
 
 	@Autowired
@@ -29,7 +31,7 @@ public class AnswerControllerV2 {
 	
 	// Add to question's answerList when answer is submitted
 	//Also update the answerId to user's repliedAnswer list. 
-		@RequestMapping(value = "/question/{questionid}/answers/user/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(value = "/v2/question/{questionid}/answers/user/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<Question> addAnswersForQuestionId(@PathVariable("questionid") String id,
 				@RequestBody Answer answer, @PathVariable("userId") String userId) {
 
