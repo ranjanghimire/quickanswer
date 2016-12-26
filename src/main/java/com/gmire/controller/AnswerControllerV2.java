@@ -1,5 +1,8 @@
 package com.gmire.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,15 +12,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.gmire.helper.AnswerHelper;
 import com.gmire.model.Answer;
+import com.gmire.model.AppUser;
 import com.gmire.model.Question;
+import com.gmire.repository.AppUserRepository;
 import com.gmire.service.QuestionService;
 
 public class AnswerControllerV2 {
 
 	@Autowired
 	QuestionService questionService;
+	
+	@Autowired
+	AppUserRepository appUserRepository;
+	
 	
 	// Add to question's answerList when answer is submitted
 	//Also update the answerId to user's repliedAnswer list. 
@@ -30,9 +38,30 @@ public class AnswerControllerV2 {
 			if (updateQuestion == null)
 				return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
 			
-			AnswerHelper.populateAnswerIdIntoAppUser(answer.getId(), userId);
+			populateAnswerIdIntoAppUser(answer.getId(), userId);
 
 			return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
+		}
+		
+		public void populateAnswerIdIntoAppUser(String id, String userId) {
+			// Put id into APPUser's list of replied IDs.
+			AppUser appUser = appUserRepository.findOne(userId);
+
+			if (appUser == null)
+				return;
+
+			// If the list is empty create one and append,
+			// else just append to the existing one
+			if (appUser.getRepliedAnswersIDs() == null) {
+				List<String> repList = new ArrayList<String>();
+				repList.add(id);
+				appUser.setRepliedAnswersIDs(repList);
+			} else {
+				appUser.getRepliedAnswersIDs().add(id);
+			}
+			// Save the appUser
+			appUserRepository.save(appUser);
+
 		}
 
 }

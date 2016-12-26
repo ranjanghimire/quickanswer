@@ -1,5 +1,6 @@
 package com.gmire.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gmire.helper.QuestionHelper;
 import com.gmire.model.AppUser;
 import com.gmire.model.Question;
 import com.gmire.service.AppUserService;
@@ -35,7 +35,7 @@ public class QuestionControllerV2 {
 				return new ResponseEntity<List<Question>>(HttpStatus.NOT_FOUND);
 			}
 			
-			retQuestions = QuestionHelper.popuLateIsLiked(retQuestions, userId); 
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
@@ -50,7 +50,7 @@ public class QuestionControllerV2 {
 				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
 			}
 			
-			retQuestions = QuestionHelper.popuLateIsLiked(retQuestions, userId); 
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
@@ -78,15 +78,60 @@ public class QuestionControllerV2 {
 		//Create a new question and update id into AppUser
 		@RequestMapping(value = "/v2/question/userid/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<Question> createQuestion(@RequestBody Question question, @PathVariable("userId") String userId) {
+			
+			System.out.println(userId);
+			
 			Question savedQuestion = questionService.create(question);
 			
-			QuestionHelper.populateQuestionIdIntoAppUser(question.getId(), userId);
+			populateQuestionIdIntoAppUser(question.getId(), userId);
 			
 			return new ResponseEntity<Question>(savedQuestion, HttpStatus.CREATED);
 		}
 		
+		public void populateQuestionIdIntoAppUser(String id, String userId) {
+			//Put id into APPUser's list of asked IDs.
+			System.out.println(userId);
+			AppUser appUser = appUserService.findOneByUserId(userId);
+			
+			if(appUser == null)
+				return;
+			
+			//If the list is empty create one and append, 
+			//else just append to the existing one
+			if(appUser.getAskedQuestionsIDs() == null){
+				List<String> askList = new ArrayList<String>();
+				askList.add(id);
+				appUser.setAskedQuestionsIDs(askList);
+			}
+			else{
+				appUser.getAskedQuestionsIDs().add(id);
+			}
+			//Save the appUser
+			appUserService.create(appUser);
+		}
 		
-		
+		public List<Question> popuLateIsLiked(List<Question> retQuestions, String userId) {
+			
+			List<Question> que = new ArrayList<Question>();
+			
+			for (Question q: retQuestions){
+				if (q.getLikedByUserIDs() != null && !q.getLikedByUserIDs().isEmpty()){
+					if (q.getLikedByUserIDs().contains(userId)){
+						q.setLiked(true);
+						que.add(q);
+					}
+					else{
+						q.setLiked(false);
+						que.add(q);
+					}
+				}
+				else{
+					que.add(q);
+				}
+				
+			}
+			return que;
+		}
 		
 		
 	
