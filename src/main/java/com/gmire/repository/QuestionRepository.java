@@ -15,9 +15,13 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	public List<Question> findByTopicIgnoreCase(String topic);
 
 	public List<Question> findAll();
-
+	
+	public List<Question> findTop10ByOrderByIdDesc();
+	
 	public Question findById(String questionId);
 
 	public List<Question> findByIdIn(List<String> askedQuestionsIDs);
+
+	public List<Question> findByAnswersIdIn(List<String> answers);
 
 }

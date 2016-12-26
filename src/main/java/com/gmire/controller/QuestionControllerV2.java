@@ -27,6 +27,32 @@ public class QuestionControllerV2 {
 	@Autowired
 	AppUserService appUserService;
 	
+	//Find only top N topics from all questions
+		@RequestMapping(value="/v2/topics/ten", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<String>> findAllTopicsTen(){
+			
+			List<String> retTopics = questionService.findAllTopicsTen();
+			
+			if (retTopics == null) {
+				return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<List<String>>(retTopics, HttpStatus.OK);
+		}
+	
+	//Find all topics from all questions
+		@RequestMapping(value="/v2/topics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<String>> findAllTopics(){
+			
+			List<String> retTopics = questionService.findAllTopics();
+			
+			if (retTopics == null) {
+				return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<List<String>>(retTopics, HttpStatus.OK);
+		}
+	
 	// Find all questions
 		@RequestMapping(value = "/v2/question/userid/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAll(@PathVariable("userId") String userId) {
@@ -73,6 +99,30 @@ public class QuestionControllerV2 {
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
+		
+		
+		//TODO: Find all questions given answerIDs. Derive answerIDs from User
+		@RequestMapping(value = "/v2/question/answer/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Question>> findAllQuestionForAnswerIDsByThisUser(@PathVariable("userId") String userId){
+			
+			AppUser appUser = appUserService.findOneByUserId(userId);
+			
+			if(appUser == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			List<String> answerIds = appUser.getRepliedAnswersIDs();
+			
+			List<Question> retQuestions = questionService.findByAnswersIdIn(answerIds);
+			
+			if (retQuestions == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
+		}
+		
+		
 		
 		//Create a new question and update id into AppUser
 		@RequestMapping(value = "/v2/question/userid/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

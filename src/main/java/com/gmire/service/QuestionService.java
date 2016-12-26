@@ -18,7 +18,7 @@ public class QuestionService {
 
 	@Autowired
 	private QuestionRepository qRepo;
-
+	
 	@Autowired
 	private AuthorService authorService;
 	
@@ -32,6 +32,35 @@ public class QuestionService {
 	public List<Question> findAll() {
 		return qRepo.findAll();
 	}
+	
+	//find all topics
+	public List<String> findAllTopics() {
+		
+		List<Question> questions = qRepo.findAll();
+		
+		List<String> retTopics = new ArrayList<String>();
+		
+		for (Question question : questions){
+			retTopics.add(question.getTopic());
+		}
+		
+		return retTopics;
+	}
+	
+	//find ten topics only
+	public List<String> findAllTopicsTen() {
+		
+		List<Question> questions = qRepo.findTop10ByOrderByIdDesc();
+		
+		List<String> retTopics = new ArrayList<String>();
+		
+		for (Question question : questions){
+			retTopics.add(question.getTopic());
+		}
+		
+		return retTopics;
+	}
+
 
 	public Question create(Question question) {
 
@@ -219,5 +248,12 @@ public class QuestionService {
 		return retQuestions;
 	}
 
+	public List<Question> findByAnswersIdIn(List<String> answerIds) {
+		// TODO Auto-generated method stub
+		
+		List<Question> retQuestions = qRepo.findByAnswersIdIn(answerIds);		
+		
+		return retQuestions;
+	}
 
 }
