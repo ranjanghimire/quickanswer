@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 
 public class AppUser {
-
+	//TODO: NEW: Change the AppUser Model to use repliedQuestionsIDs instead of repliedAnswersIDs. 
 	@Id
 	private String id;
 

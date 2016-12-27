@@ -102,6 +102,8 @@ public class QuestionControllerV2 {
 		
 		
 		//TODO: Find all questions given answerIDs. Derive answerIDs from User
+		//TODO: NEW: Change the AppUser Model to use repliedQuestions instead of repliedAnswerList. 
+		//Then use below method to easily get list of questions and return.
 		@RequestMapping(value = "/v2/question/answer/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllQuestionForAnswerIDsByThisUser(@PathVariable("userId") String userId){
 			
