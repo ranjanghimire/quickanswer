@@ -30,7 +30,7 @@ public class QuestionService {
 	}
 
 	public List<Question> findAll() {
-		return qRepo.findAll();
+		return qRepo.findAllByOrderByVotesDesc();
 	}
 	
 	//find all topics
@@ -212,24 +212,37 @@ public class QuestionService {
 
 	public Question incrementLikes(Question question, String userId) {
 		//Find the question by given id. 
+		
 		Question incQuestion = qRepo.findOne(question.getId());
+
+		Long savedVotes = (incQuestion.getVotes() == null)? 0L: incQuestion.getVotes() ;
 		
 		//Save the likesCount to it. 
-		if(question.getVotes() != null && question.getVotes() > 0){
+		if(question.getVotes() != null && question.getVotes() >= 0){
 			incQuestion.setVotes(question.getVotes());
 		}
 				
 		//Add userId to the list likedByUserIDs.
 		
-		if(incQuestion.getLikedByUserIDs() == null){
-			List<String> newUserList = new ArrayList<String>();
-			newUserList.add(userId);
-			incQuestion.setLikedByUserIDs(newUserList);
+		if (question.getVotes() > savedVotes){
+			if(incQuestion.getLikedByUserIDs() == null){
+				List<String> newUserList = new ArrayList<String>();
+				newUserList.add(userId);
+				incQuestion.setLikedByUserIDs(newUserList);
+			}
+			else{
+				if (!incQuestion.getLikedByUserIDs().contains(userId))
+					incQuestion.getLikedByUserIDs().add(userId);	
+			}
 		}
 		else{
-			if (!incQuestion.getLikedByUserIDs().contains(userId))
-				incQuestion.getLikedByUserIDs().add("userId");	
+			//Remove userId from the list
+			if (incQuestion.getLikedByUserIDs() != null && !incQuestion.getLikedByUserIDs().isEmpty()){
+				incQuestion.getLikedByUserIDs().remove(userId);
+			}
 		}
+		
+		
 		
 		//save the incQuestion
 		return qRepo.save(incQuestion);

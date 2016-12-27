@@ -24,4 +24,6 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
 	public List<Question> findByAnswersIdIn(List<String> answers);
 
+	public List<Question> findAllByOrderByVotesDesc();
+
 }
