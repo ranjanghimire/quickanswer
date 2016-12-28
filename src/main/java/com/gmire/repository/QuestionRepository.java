@@ -26,4 +26,8 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
 	public List<Question> findAllByOrderByVotesDesc();
 
+	public Long countByAuthorAppUserId(String userId);
+
+	public Long countByAnswersAuthorAppUserId(String userId);
+
 }

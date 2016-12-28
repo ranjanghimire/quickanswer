@@ -27,6 +27,30 @@ public class QuestionControllerV2 {
 	@Autowired
 	AppUserService appUserService;
 	
+	//Return count of questions asked by a user
+	@RequestMapping (value="/v2/question/count/userid/{userId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> countQuestionByUser(@PathVariable("userId") String userId){
+		Long retValue = questionService.countByAuthorAppUserId(userId);
+		
+		if (retValue == null){
+			return new ResponseEntity<Long>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Long>(retValue, HttpStatus.OK);
+	}
+	
+	//Return count of answers replied by a user
+	@RequestMapping(value="/v2/question/answer/count/userid/{userId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> countAnswersByUser(@PathVariable("userId") String userId){
+		Long retValue = questionService.countByAnswersAuthorAppUserId(userId);
+		
+		if (retValue == null){
+			return new ResponseEntity<Long>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Long>(retValue, HttpStatus.OK);
+	}
+	
 	//Find only top N topics from all questions
 		@RequestMapping(value="/v2/topics/ten", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<String>> findAllTopicsTen(){

@@ -269,4 +269,17 @@ public class QuestionService {
 		return retQuestions;
 	}
 
+	public Long countByAuthorAppUserId(String userId) {
+		
+		Long retValue = qRepo.countByAuthorAppUserId(userId);
+		retValue = (retValue == null)? 0 : retValue;
+		return retValue;
+	}
+
+	public Long countByAnswersAuthorAppUserId(String userId) {
+		Long retValue = qRepo.countByAnswersAuthorAppUserId(userId);
+		retValue = (retValue == null)? 0 : retValue;
+		return retValue;
+	}
+
 }
