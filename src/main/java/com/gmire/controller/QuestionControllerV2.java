@@ -127,25 +127,18 @@ public class QuestionControllerV2 {
 		}
 		
 		
-		//TODO: Find all questions given answerIDs. Derive answerIDs from User
-		//TODO: NEW: Change the AppUser Model to use repliedQuestions instead of repliedAnswerList. 
-		//Then use below method to easily get list of questions and return.
+		//TODO: Find all questions that the user has replied to. Given appUserId. 
+		//findByAnswersAuthorAppUserId
 		@RequestMapping(value = "/v2/question/answer/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllQuestionForAnswerIDsByThisUser(@PathVariable("userId") String userId){
-			
-			AppUser appUser = appUserService.findOneByUserId(userId);
-			
-			if(appUser == null){
-				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
-			}
-			
-			List<String> answerIds = appUser.getRepliedAnswersIDs();
-			
-			List<Question> retQuestions = questionService.findByAnswersIdIn(answerIds);
+						
+			List<Question> retQuestions = questionService.findByAnswersAuthorAppUserId(userId);
 			
 			if (retQuestions == null){
 				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
 			}
+			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}

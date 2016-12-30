@@ -261,14 +261,6 @@ public class QuestionService {
 		return retQuestions;
 	}
 
-	public List<Question> findByAnswersIdIn(List<String> answerIds) {
-		// TODO Auto-generated method stub
-		
-		List<Question> retQuestions = qRepo.findByAnswersIdIn(answerIds);		
-		
-		return retQuestions;
-	}
-
 	public Long countByAuthorAppUserId(String userId) {
 		
 		Long retValue = qRepo.countByAuthorAppUserId(userId);
@@ -280,6 +272,11 @@ public class QuestionService {
 		Long retValue = qRepo.countByAnswersAuthorAppUserId(userId);
 		retValue = (retValue == null)? 0 : retValue;
 		return retValue;
+	}
+
+	public List<Question> findByAnswersAuthorAppUserId(String userId) {
+		List<Question> retQuestions = qRepo.findByAnswersAuthorAppUserId(userId);
+		return retQuestions;
 	}
 
 }
