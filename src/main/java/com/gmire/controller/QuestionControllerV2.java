@@ -121,6 +121,8 @@ public class QuestionControllerV2 {
 				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
 			}
 			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
+			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
 		
