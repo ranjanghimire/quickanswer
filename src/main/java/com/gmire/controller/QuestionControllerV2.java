@@ -104,6 +104,22 @@ public class QuestionControllerV2 {
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
+		
+		// Find all unanswered questions
+		@RequestMapping(value="/v2/question/unanswered/userid/{userId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Question>> findAllUnansweredQuestions(@PathVariable("userId") String userId) {
+			
+			//find all questions with no answers
+			List<Question> retQuestions = questionService.findByAnswersIsNull();
+			
+			if (retQuestions == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
+			
+			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
+		}
 
 		//Find all questions asked by a given user
 		@RequestMapping(value = "/v2/question/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -127,8 +143,7 @@ public class QuestionControllerV2 {
 		}
 		
 		
-		//TODO: Find all questions that the user has replied to. Given appUserId. 
-		//findByAnswersAuthorAppUserId
+		//Find all questions that the user has replied to. Given appUserId. 
 		@RequestMapping(value = "/v2/question/answer/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllQuestionForAnswerIDsByThisUser(@PathVariable("userId") String userId){
 						
@@ -142,7 +157,6 @@ public class QuestionControllerV2 {
 			
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
-		
 		
 		
 		//Create a new question and update id into AppUser

@@ -279,4 +279,9 @@ public class QuestionService {
 		return retQuestions;
 	}
 
+	public List<Question> findByAnswersIsNull() {
+		List<Question> retQuestions = qRepo.findByAnswersIsNull();
+		return retQuestions;
+	}
+
 }

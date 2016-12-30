@@ -32,4 +32,6 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
 	public List<Question> findByAnswersAuthorAppUserId(String userId);
 
+	public List<Question> findByAnswersIsNull();
+
 }
