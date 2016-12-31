@@ -125,6 +125,19 @@ public class QuestionControllerV2 {
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
 		
+		//Find a question by Id
+		@RequestMapping(value="/v2/question/{questionId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Question> findbyId(@PathVariable("questionId") String questionId){
+			
+			Question question = questionService.findById(questionId);
+			
+			if (question == null){
+				return new ResponseEntity<Question> (HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<Question> (question, HttpStatus.OK);
+		}
+		
 		// Find all unanswered questions
 		@RequestMapping(value="/v2/question/unanswered/userid/{userId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllUnansweredQuestions(@PathVariable("userId") String userId) {

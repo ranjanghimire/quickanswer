@@ -307,4 +307,8 @@ public class QuestionService {
 		return new ArrayList<Question>(retSet);
 	}
 
+	public Question findById(String questionId) {
+		return qRepo.findOne(questionId);
+	}
+
 }
