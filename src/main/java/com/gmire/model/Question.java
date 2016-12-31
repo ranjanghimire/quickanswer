@@ -30,6 +30,8 @@ public class Question {
 	private String topic;
 
 	private List<String> tags;
+	
+	private String category;
 
 	private boolean isLocationSpecific;
 
@@ -48,6 +50,14 @@ public class Question {
 	private boolean hasAcceptedAnswer;
 	
 	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	public boolean isLiked() {
 		return isLiked;
 	}
