@@ -1,8 +1,10 @@
 package com.gmire.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,6 +284,27 @@ public class QuestionService {
 	public List<Question> findByAnswersIsNull() {
 		List<Question> retQuestions = qRepo.findByAnswersIsNull();
 		return retQuestions;
+	}
+
+	public List<Question> searchByWord(String word) {
+		
+		Set<Question> retSet = new HashSet<Question>();
+		
+		List<Question> retMainQuestion = qRepo.findByMainQuestionIgnoreCaseLike(word);
+		Set<Question> retMqSet = new HashSet<Question>(retMainQuestion);
+		
+		
+		List<Question> retTopic = qRepo.findByTopicIgnoreCaseLike(word);
+		Set<Question> retToSet = new HashSet<Question>(retTopic);
+		
+		List<Question> retCategory = qRepo.findByCategoryIgnoreCaseLike(word);
+		Set<Question> retCaSet = new HashSet<Question>(retCategory);
+		
+		retSet.addAll(retMqSet);
+		retSet.addAll(retToSet);
+		retSet.addAll(retCaSet);
+		
+		return new ArrayList<Question>(retSet);
 	}
 
 }

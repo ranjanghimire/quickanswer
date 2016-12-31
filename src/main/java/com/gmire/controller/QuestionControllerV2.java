@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gmire.dto.WordSearchDto;
+import com.gmire.helper.DtoHelper;
 import com.gmire.model.AppUser;
 import com.gmire.model.Question;
 import com.gmire.service.AppUserService;
@@ -51,7 +53,25 @@ public class QuestionControllerV2 {
 		return new ResponseEntity<Long>(retValue, HttpStatus.OK);
 	}
 	
-	//Find only top N topics from all questions
+	//Search by given word
+	//Display top 10 topics, 5 categories and 10 questions
+	//Bottomline, return combined questions
+	@RequestMapping(value="/v2/topics/search/{word}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<WordSearchDto>> searchByWord(@PathVariable("word") String word){
+		
+		List<Question> retQuestions = questionService.searchByWord(word);
+		
+		if (retQuestions == null) {
+			return new ResponseEntity<List<WordSearchDto>>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<WordSearchDto> wto = DtoHelper.transform(retQuestions);
+		
+		return new ResponseEntity<List<WordSearchDto>>(wto, HttpStatus.OK);	
+	}
+	
+	
+	//Find only top ten topics from all questions
 		@RequestMapping(value="/v2/topics/ten", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<String>> findAllTopicsTen(){
 			

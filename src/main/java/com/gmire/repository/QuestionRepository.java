@@ -1,6 +1,7 @@
 package com.gmire.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,10 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question);
 	
 	public List<Question> findByTopicIgnoreCase(String topic);
+	
+	public List<Question> findByTopicIgnoreCaseLike(String word);
+	
+	public List<Question> findByCategoryIgnoreCaseLike(String word);
 
 	public List<Question> findAll();
 	
