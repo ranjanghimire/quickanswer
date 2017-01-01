@@ -18,6 +18,8 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	public List<Question> findByTopicIgnoreCaseLike(String word);
 	
 	public List<Question> findByCategoryIgnoreCaseLike(String word);
+	
+	public List<Question> findByCategoryIgnoreCase(String category);
 
 	public List<Question> findAll();
 	
@@ -38,5 +40,7 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	public List<Question> findByAnswersAuthorAppUserId(String userId);
 
 	public List<Question> findByAnswersIsNull();
+
+	
 
 }

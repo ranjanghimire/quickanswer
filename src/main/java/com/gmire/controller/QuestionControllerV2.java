@@ -110,6 +110,20 @@ public class QuestionControllerV2 {
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
 		
+		//Find all questions by category
+		@RequestMapping(value="/v2/question/category/{category}/userid/{userId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Question>> findByCategory(@PathVariable("category") String category, @PathVariable("userId") String userId){
+			
+			List<Question> retQuestions = questionService.findByCategoryIgnoreCase(category);
+			
+			if (retQuestions == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
+			
+			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
+		}
 		
 		//Find all questions by Topic
 		@RequestMapping(value="/v2/question/topic/{topic}/userid/{userId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

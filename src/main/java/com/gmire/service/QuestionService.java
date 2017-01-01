@@ -205,6 +205,14 @@ public class QuestionService {
 		return retQuestion;
 	}
 
+	
+	public List<Question> findByCategoryIgnoreCase(String category) {
+
+		List<Question> retList = qRepo.findByCategoryIgnoreCase(category);
+		return retList;
+	}
+
+	
 	public List<Question> findByTopicIgnoreCase(String topic) {
 
 		List<Question> retList = new ArrayList<Question>();
@@ -310,5 +318,6 @@ public class QuestionService {
 	public Question findById(String questionId) {
 		return qRepo.findOne(questionId);
 	}
+
 
 }
