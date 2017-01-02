@@ -21,6 +21,8 @@ public class Question {
 	// the author
 	private Author author;
 
+	private boolean isReported;
+	
 	//Anytime the question is upvoted or viewed, etc., the weight goes up.
 	//Also, questions asked by higher weight user has higher weight. 
 	private Long weight;
@@ -49,7 +51,15 @@ public class Question {
 	// These are candidates for review and to set as hasVerifiedAnswer
 	private boolean hasAcceptedAnswer;
 	
-	
+	@JsonIgnore
+	public boolean isReported() {
+		return isReported;
+	}
+
+	public void setReported(boolean isReported) {
+		this.isReported = isReported;
+	}
+
 	public String getCategory() {
 		return category;
 	}

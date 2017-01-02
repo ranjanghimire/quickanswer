@@ -208,7 +208,7 @@ public class QuestionService {
 	
 	public List<Question> findByCategoryIgnoreCase(String category) {
 
-		List<Question> retList = qRepo.findByCategoryIgnoreCase(category);
+		List<Question> retList = qRepo.findByCategoryIgnoreCaseOrderByVotesDesc(category);
 		return retList;
 	}
 
@@ -216,7 +216,7 @@ public class QuestionService {
 	public List<Question> findByTopicIgnoreCase(String topic) {
 
 		List<Question> retList = new ArrayList<Question>();
-		retList = qRepo.findByTopicIgnoreCase(topic);
+		retList = qRepo.findByTopicIgnoreCaseOrderByVotesDesc(topic);
 		return retList;
 	}
 
@@ -317,6 +317,14 @@ public class QuestionService {
 
 	public Question findById(String questionId) {
 		return qRepo.findOne(questionId);
+	}
+
+	public void reportQuestion(String questionId) {
+		Question question = qRepo.findOne(questionId);
+		
+		question.setReported(true);
+		
+		qRepo.save(question);
 	}
 
 

@@ -3,8 +3,6 @@ package com.gmire.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,12 +72,7 @@ public class QuestionControllerV2 {
 		return new ResponseEntity<List<WordSearchDto>>(wto, HttpStatus.OK);	
 	}
 	
-	//Create a CategoryDTO with CategoryName and List of topics
-	//TODO: Get list of questions by calling findAll
-	//TODO: Loop the returned questions and fill up CategoryDTO with category names.
-	//TODO: For each categoryName in CategoryDTO, fill up the list of topics.
-	//TODO: Return the CategoryDTO
-	
+	//Topics Page Category Implementation. Return Category and its topics
 	@RequestMapping(value="/v2/category/{category}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CategoryDto>> listTopicsByCategory(@PathVariable("category") String category){
 		List<Question> retQuestions = questionService.findByCategoryIgnoreCase(category);
@@ -95,6 +88,13 @@ public class QuestionControllerV2 {
 		}
 		
 		return new ResponseEntity<List<CategoryDto>>(categoryDtoList, HttpStatus.OK);
+	}
+	
+	//Report a question
+	@RequestMapping(value="/v2/question/{questionId}/report", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Question> reportQuestion(@PathVariable("questionId") String questionId){
+		questionService.reportQuestion(questionId);		
+		return new ResponseEntity<Question>(HttpStatus.NO_CONTENT);
 	}
 	
 	
