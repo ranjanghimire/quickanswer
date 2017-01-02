@@ -1,7 +1,10 @@
 package com.gmire.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gmire.dto.CategoryDto;
 import com.gmire.dto.WordSearchDto;
 import com.gmire.helper.DtoHelper;
 import com.gmire.model.AppUser;
@@ -70,7 +74,63 @@ public class QuestionControllerV2 {
 		return new ResponseEntity<List<WordSearchDto>>(wto, HttpStatus.OK);	
 	}
 	
+	//Create a CategoryDTO with CategoryName and List of topics
+	//TODO: Get list of questions by calling findAll
+	//TODO: Loop the returned questions and fill up CategoryDTO with category names.
+	//TODO: For each categoryName in CategoryDTO, fill up the list of topics.
+	//TODO: Return the CategoryDTO
 	
+	@RequestMapping(value="/v2/category/{category}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<CategoryDto>> listTopicsByCategory(@PathVariable("category") String category){
+		List<Question> retQuestions = questionService.findByCategoryIgnoreCase(category);
+		
+		if (retQuestions == null) {
+			return new ResponseEntity<List<CategoryDto>>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<CategoryDto> categoryDtoList = populateCategoryDto(retQuestions);
+		
+		if (categoryDtoList == null || categoryDtoList.isEmpty()){
+			return new ResponseEntity<List<CategoryDto>>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<List<CategoryDto>>(categoryDtoList, HttpStatus.OK);
+	}
+	
+	
+	private List<CategoryDto> populateCategoryDto(List<Question> retQuestions) {
+
+		List<CategoryDto> listDto = new ArrayList<CategoryDto>();
+		
+		HashMap<String, List<String>> hashMap = new HashMap<String, List<String>>();
+		
+		for (Question question: retQuestions){
+			if (question.getCategory() != null){
+				if (!hashMap.containsKey(question.getCategory())) {
+				    List<String> list = new ArrayList<String>();
+				    list.add(question.getTopic());
+		
+				    hashMap.put(question.getCategory(), list);
+				} else {
+				    hashMap.get(question.getCategory()).add(question.getTopic());
+				}
+			}
+		}
+		
+		if (hashMap != null && !hashMap.isEmpty()){
+		
+			for (String key: hashMap.keySet()){
+				CategoryDto catDto = new CategoryDto();
+				catDto.setCategory(key);
+				catDto.setTopics(hashMap.get(key));
+				listDto.add(catDto);
+			}
+		}
+		
+		return listDto;
+	
+	}
+
 	//Find only top ten topics from all questions
 		@RequestMapping(value="/v2/topics/ten", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<String>> findAllTopicsTen(){
@@ -264,6 +324,6 @@ public class QuestionControllerV2 {
 			return que;
 		}
 		
-		
-	
 }
+
+
