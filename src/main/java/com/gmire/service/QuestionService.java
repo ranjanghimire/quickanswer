@@ -316,7 +316,7 @@ public class QuestionService {
 	}
 
 	public List<Question> findByAnswersIsNull() {
-		List<Question> retQuestions = qRepo.findByAnswersIsNull();
+		List<Question> retQuestions = qRepo.findByAnswersIsNullOrderByVotesDesc();
 		return retQuestions;
 	}
 
