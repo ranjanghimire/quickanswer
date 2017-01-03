@@ -20,10 +20,9 @@ public class QuestionService {
 
 	@Autowired
 	private QuestionRepository qRepo;
-	
+
 	@Autowired
 	private AuthorService authorService;
-	
 
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question) {
 		List<Question> retList = new ArrayList<Question>();
@@ -34,41 +33,42 @@ public class QuestionService {
 	public List<Question> findAll() {
 		return qRepo.findAllByOrderByVotesDesc();
 	}
-	
-	//find all topics
+
+	// find all topics
 	public List<String> findAllTopics() {
-		
+
 		List<Question> questions = qRepo.findAll();
-		
+
 		List<String> retTopics = new ArrayList<String>();
-		
-		for (Question question : questions){
+
+		for (Question question : questions) {
 			retTopics.add(question.getTopic());
 		}
-		
-		return retTopics;
-	}
-	
-	//find ten topics only
-	public List<String> findAllTopicsTen() {
-		
-		List<Question> questions = qRepo.findTop10ByOrderByIdDesc();
-		
-		List<String> retTopics = new ArrayList<String>();
-		
-		for (Question question : questions){
-			retTopics.add(question.getTopic());
-		}
-		
+
 		return retTopics;
 	}
 
+	// find ten topics only
+	public List<String> findAllTopicsTen() {
+
+		List<Question> questions = qRepo.findTop10ByOrderByIdDesc();
+
+		List<String> retTopics = new ArrayList<String>();
+
+		for (Question question : questions) {
+			retTopics.add(question.getTopic());
+		}
+
+		return retTopics;
+	}
 
 	public Question create(Question question) {
 
 		// If id of author id is not present, search for Author with given
 		// appUserId
 		// If found, use existing author id. If not create a new objectId.
+
+		question.setTopic(convertToCamelCase(question.getTopic()));
 
 		if (question.getAuthor().getId() == null) {
 			Author author = authorService.findOneByAppUserId(question.getAuthor().getAppUserId());
@@ -82,6 +82,38 @@ public class QuestionService {
 
 		Question savedQuestion = qRepo.save(question);
 		return savedQuestion;
+	}
+
+	private static String convertToCamelCase(String topic) {
+
+		topic = topic.trim();
+
+		if (topic == null)
+			return null;
+		
+		if(topic.length() < 2){
+			return topic;
+		}
+		
+		if (!topic.contains(" ")) {
+			StringBuilder retStr = new StringBuilder();
+			retStr.append(topic.substring(0, 1).toUpperCase());
+			retStr.append(topic.substring(1).toLowerCase());
+			return retStr.toString();
+		}
+
+		final StringBuilder ret = new StringBuilder(topic.length());
+
+		for (final String word : topic.split(" ")) {
+			if (!word.isEmpty()) {
+				ret.append(word.substring(0, 1).toUpperCase());
+				ret.append(word.substring(1).toLowerCase());
+			}
+			if (!(ret.length() == topic.length()))
+				ret.append(" ");
+		}
+
+		return ret.toString();
 	}
 
 	public Question addAnswersForQuestionId(String id, Answer answer) {
@@ -205,14 +237,12 @@ public class QuestionService {
 		return retQuestion;
 	}
 
-	
 	public List<Question> findByCategoryIgnoreCase(String category) {
 
 		List<Question> retList = qRepo.findByCategoryIgnoreCaseOrderByVotesDesc(category);
 		return retList;
 	}
 
-	
 	public List<Question> findByTopicIgnoreCase(String topic) {
 
 		List<Question> retList = new ArrayList<Question>();
@@ -221,66 +251,62 @@ public class QuestionService {
 	}
 
 	public Question incrementLikes(Question question, String userId) {
-		//Find the question by given id. 
-		
+		// Find the question by given id.
+
 		Question incQuestion = qRepo.findOne(question.getId());
 
-		Long savedVotes = (incQuestion.getVotes() == null)? 0L: incQuestion.getVotes() ;
-		
-		//Save the likesCount to it. 
-		if(question.getVotes() != null && question.getVotes() >= 0){
+		Long savedVotes = (incQuestion.getVotes() == null) ? 0L : incQuestion.getVotes();
+
+		// Save the likesCount to it.
+		if (question.getVotes() != null && question.getVotes() >= 0) {
 			incQuestion.setVotes(question.getVotes());
 		}
-				
-		//Add userId to the list likedByUserIDs.
-		
-		if (question.getVotes() > savedVotes){
-			if(incQuestion.getLikedByUserIDs() == null){
+
+		// Add userId to the list likedByUserIDs.
+
+		if (question.getVotes() > savedVotes) {
+			if (incQuestion.getLikedByUserIDs() == null) {
 				List<String> newUserList = new ArrayList<String>();
 				newUserList.add(userId);
 				incQuestion.setLikedByUserIDs(newUserList);
-			}
-			else{
+			} else {
 				if (!incQuestion.getLikedByUserIDs().contains(userId))
-					incQuestion.getLikedByUserIDs().add(userId);	
+					incQuestion.getLikedByUserIDs().add(userId);
 			}
-		}
-		else{
-			//Remove userId from the list
-			if (incQuestion.getLikedByUserIDs() != null && !incQuestion.getLikedByUserIDs().isEmpty()){
+		} else {
+			// Remove userId from the list
+			if (incQuestion.getLikedByUserIDs() != null && !incQuestion.getLikedByUserIDs().isEmpty()) {
 				incQuestion.getLikedByUserIDs().remove(userId);
 			}
 		}
-		
-		
-		
-		//save the incQuestion
+
+		// save the incQuestion
 		return qRepo.save(incQuestion);
-		
-		//return the updated question.
+
+		// return the updated question.
 	}
 
 	public List<Question> findByIdIn(List<String> askedQuestionsIDs) {
 
-		if (askedQuestionsIDs == null || askedQuestionsIDs.isEmpty()){
+		if (askedQuestionsIDs == null || askedQuestionsIDs.isEmpty()) {
 			return null;
 		}
-		
+
 		List<Question> retQuestions = qRepo.findByIdIn(askedQuestionsIDs);
-		
+
 		return retQuestions;
 	}
 
 	public Long countByAuthorAppUserId(String userId) {
-		
+
 		Long retValue = qRepo.countByAuthorAppUserId(userId);
-		retValue = (retValue == null)? 0 : retValue;
+		retValue = (retValue == null) ? 0 : retValue;
 		return retValue;
 	}
 
 	public Long countByAnswersAuthorAppUserId(String userId) {
 		Long retValue = qRepo.countByAnswersAuthorAppUserId(userId);
-		retValue = (retValue == null)? 0 : retValue;
+		retValue = (retValue == null) ? 0 : retValue;
 		return retValue;
 	}
 
@@ -295,23 +321,22 @@ public class QuestionService {
 	}
 
 	public List<Question> searchByWord(String word) {
-		
+
 		Set<Question> retSet = new HashSet<Question>();
-		
+
 		List<Question> retMainQuestion = qRepo.findByMainQuestionIgnoreCaseLike(word);
 		Set<Question> retMqSet = new HashSet<Question>(retMainQuestion);
-		
-		
+
 		List<Question> retTopic = qRepo.findByTopicIgnoreCaseLike(word);
 		Set<Question> retToSet = new HashSet<Question>(retTopic);
-		
+
 		List<Question> retCategory = qRepo.findByCategoryIgnoreCaseLike(word);
 		Set<Question> retCaSet = new HashSet<Question>(retCategory);
-		
+
 		retSet.addAll(retMqSet);
 		retSet.addAll(retToSet);
 		retSet.addAll(retCaSet);
-		
+
 		return new ArrayList<Question>(retSet);
 	}
 
@@ -321,11 +346,10 @@ public class QuestionService {
 
 	public void reportQuestion(String questionId) {
 		Question question = qRepo.findOne(questionId);
-		
+
 		question.setReported(true);
-		
+
 		qRepo.save(question);
 	}
-
 
 }
