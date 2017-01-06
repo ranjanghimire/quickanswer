@@ -3,6 +3,7 @@ package com.gmire.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,8 +69,8 @@ public class QuestionController {
 
 	// Find all questions
 	@RequestMapping(value = "question", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Question>> findAll() {
-		List<Question> retQuestion = questionService.findAll();
+	public ResponseEntity<List<Question>> findAll(Pageable pageable) {
+		List<Question> retQuestion = questionService.findAll(pageable);
 		if (retQuestion == null) {
 			return new ResponseEntity<List<Question>>(HttpStatus.NOT_FOUND);
 		}

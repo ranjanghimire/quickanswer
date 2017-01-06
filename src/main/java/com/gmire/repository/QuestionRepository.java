@@ -2,6 +2,7 @@ package com.gmire.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +31,7 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
 	public List<Question> findByAnswersIdIn(List<String> answers);
 
-	public List<Question> findAllByOrderByVotesDesc();
+	public List<Question> findAllByOrderByVotesDesc(Pageable pageable);
 
 	public Long countByAuthorAppUserId(String userId);
 
@@ -39,6 +40,8 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 	public List<Question> findByAnswersAuthorAppUserId(String userId);
 
 	public List<Question> findByAnswersIsNullOrderByVotesDesc();
+
+	public List<Question> findDistinctTop500ByCategoryNotIgnoreCaseOrderByVotesDesc(String category);
 
 	
 

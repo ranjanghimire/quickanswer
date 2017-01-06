@@ -2,9 +2,12 @@ package com.gmire.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +93,21 @@ public class QuestionControllerV2 {
 		return new ResponseEntity<List<CategoryDto>>(categoryDtoList, HttpStatus.OK);
 	}
 	
+	//TODO: Return top N categories with N or less topics each.
+	@RequestMapping(value="/v2/category", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<CategoryDto>> listTopTopicsByTopCategory(){
+		
+		List<Question> retQuestions = questionService.findDistinctTop500ByOrderByVotesDesc();
+		
+		if (retQuestions == null) {
+			return new ResponseEntity<List<CategoryDto>>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<CategoryDto> categoryDtoList = populateCategoryDto(retQuestions);
+		
+		return new ResponseEntity<List<CategoryDto>>(categoryDtoList, HttpStatus.OK);
+	}
+	
 	//Report a question
 	@RequestMapping(value="/v2/question/{questionId}/report", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Question> reportQuestion(@PathVariable("questionId") String questionId){
@@ -102,17 +120,19 @@ public class QuestionControllerV2 {
 
 		List<CategoryDto> listDto = new ArrayList<CategoryDto>();
 		
-		HashMap<String, List<String>> hashMap = new HashMap<String, List<String>>();
+		HashMap<String, Set<String>> hashMap = new HashMap<String, Set<String>>();
 		
 		for (Question question: retQuestions){
 			if (question.getCategory() != null){
 				if (!hashMap.containsKey(question.getCategory())) {
-				    List<String> list = new ArrayList<String>();
+				    Set<String> list = new HashSet<String>();
 				    list.add(question.getTopic());
 		
 				    hashMap.put(question.getCategory(), list);
 				} else {
-				    hashMap.get(question.getCategory()).add(question.getTopic());
+					//put only 10 topics max
+					if (hashMap.get(question.getCategory()).size() < 10)
+						hashMap.get(question.getCategory()).add(question.getTopic());
 				}
 			}
 		}
@@ -122,7 +142,7 @@ public class QuestionControllerV2 {
 			for (String key: hashMap.keySet()){
 				CategoryDto catDto = new CategoryDto();
 				catDto.setCategory(key);
-				catDto.setTopics(hashMap.get(key));
+				catDto.setTopics(new ArrayList<String>(hashMap.get(key)));
 				listDto.add(catDto);
 			}
 		}
@@ -159,8 +179,8 @@ public class QuestionControllerV2 {
 	
 	// Find all questions
 		@RequestMapping(value = "/v2/question/userid/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<List<Question>> findAll(@PathVariable("userId") String userId) {
-			List<Question> retQuestions = questionService.findAll();
+		public ResponseEntity<List<Question>> findAll(@PathVariable("userId") String userId, Pageable pageable) {
+			List<Question> retQuestions = questionService.findAll(pageable);
 			if (retQuestions == null) {
 				return new ResponseEntity<List<Question>>(HttpStatus.NOT_FOUND);
 			}

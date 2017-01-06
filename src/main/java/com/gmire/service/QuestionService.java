@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gmire.model.Answer;
@@ -30,8 +31,8 @@ public class QuestionService {
 		return retList;
 	}
 
-	public List<Question> findAll() {
-		return qRepo.findAllByOrderByVotesDesc();
+	public List<Question> findAll(Pageable pageable) {
+		return qRepo.findAllByOrderByVotesDesc(pageable);
 	}
 
 	// find all topics
@@ -242,6 +243,12 @@ public class QuestionService {
 		List<Question> retList = qRepo.findByCategoryIgnoreCaseOrderByVotesDesc(category);
 		return retList;
 	}
+	
+
+	public List<Question> findDistinctTop500ByOrderByVotesDesc() {
+		List<Question> retList = qRepo.findDistinctTop500ByCategoryNotIgnoreCaseOrderByVotesDesc("General");
+		return retList;
+	}
 
 	public List<Question> findByTopicIgnoreCase(String topic) {
 
@@ -351,5 +358,6 @@ public class QuestionService {
 
 		qRepo.save(question);
 	}
+
 
 }
