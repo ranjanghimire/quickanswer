@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gmire.dto.CategoryDto;
 import com.gmire.dto.WordSearchDto;
 import com.gmire.helper.DtoHelper;
+import com.gmire.model.Answer;
 import com.gmire.model.AppUser;
 import com.gmire.model.Question;
 import com.gmire.service.AppUserService;
@@ -325,21 +326,26 @@ public class QuestionControllerV2 {
 			
 			List<Question> que = new ArrayList<Question>();
 			
+			//populate likes of question
 			for (Question q: retQuestions){
 				if (q.getLikedByUserIDs() != null && !q.getLikedByUserIDs().isEmpty()){
 					if (q.getLikedByUserIDs().contains(userId)){
 						q.setLiked(true);
-						que.add(q);
 					}
-					else{
-						q.setLiked(false);
-						que.add(q);
-					}
-				}
-				else{
-					que.add(q);
 				}
 				
+				//populate likes of answers
+				if(q.getAnswers() != null){
+					for (Answer ans : q.getAnswers()){
+						if (ans.getLikedByUserIDs() != null && !ans.getLikedByUserIDs().isEmpty()){
+							if(ans.getLikedByUserIDs().contains(userId)){
+								ans.setLiked(true);
+							}
+						}
+					}
+				}
+				
+				que.add(q);
 			}
 			return que;
 		}

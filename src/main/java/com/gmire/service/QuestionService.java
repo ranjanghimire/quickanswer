@@ -256,7 +256,11 @@ public class QuestionService {
 		retList = qRepo.findByTopicIgnoreCaseOrderByVotesDesc(topic);
 		return retList;
 	}
-
+	
+	//TODO: increment likes of an answer to a question
+	
+	
+	//increment likes of a question
 	public Question incrementLikes(Question question, String userId) {
 		// Find the question by given id.
 

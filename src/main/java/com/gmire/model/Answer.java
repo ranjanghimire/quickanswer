@@ -1,7 +1,11 @@
 package com.gmire.model;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Answer {
 
@@ -15,12 +19,36 @@ public class Answer {
 	private Author author;
 
 	private Long weight;
+	
+	private boolean isLiked;
+	
+	@JsonIgnore
+	private List<String> likedByUserIDs; 
 
 	//whether or not the answer is marked by some user to be accepted as a verified answer
 	private boolean isMarkedForAcceptance;
 
 	//After review, the answer can be marked as verified. 
 	private boolean isVerifiedAnswer;
+
+	public boolean isLiked() {
+		return isLiked;
+	}
+
+	
+	public List<String> getLikedByUserIDs() {
+		return likedByUserIDs;
+	}
+
+
+	public void setLikedByUserIDs(List<String> likedByUserIDs) {
+		this.likedByUserIDs = likedByUserIDs;
+	}
+
+
+	public void setLiked(boolean isLiked) {
+		this.isLiked = isLiked;
+	}
 
 	public boolean isMarkedForAcceptance() {
 		return isMarkedForAcceptance;
