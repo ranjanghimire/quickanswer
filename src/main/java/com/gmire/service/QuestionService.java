@@ -123,8 +123,8 @@ public class QuestionService {
 			return null;
 		}
 
-		if (answer.getId() == null) {
-			answer.setId(new ObjectId().toString());
+		if (answer.getAnswerId() == null) {
+			answer.setAnswerId(new ObjectId().toString());
 		}
 
 		// If id of author id is not present, search for Author with given
@@ -185,7 +185,7 @@ public class QuestionService {
 
 		while (itr.hasNext()) {
 			Answer remAns = (Answer) itr.next();
-			if (remAns.getId().equals(answerId)) {
+			if (remAns.getAnswerId().equals(answerId)) {
 				itr.remove();
 				break;
 			}
@@ -206,13 +206,13 @@ public class QuestionService {
 
 		Iterator<Answer> itr = question.getAnswers().iterator();
 
-		String answerId = answer.getId();
+		String answerId = answer.getAnswerId();
 
 		while (itr.hasNext()) {
 			Answer remAns = (Answer) itr.next();
-			if (remAns.getId().equals(answerId)) {
+			if (remAns.getAnswerId().equals(answerId)) {
 				itr.remove();
-				answer.setId(answerId);
+				answer.setAnswerId(answerId);
 				question.getAnswers().add(answer);
 				break;
 			}
@@ -257,10 +257,50 @@ public class QuestionService {
 		return retList;
 	}
 	
-	//TODO: increment likes of an answer to a question
+	//increment/decrement likes of an answer to a question
+	public Question incrementAnswerLikes(Answer answer, String userId) {
+
+		Question incQuestion = qRepo.findByAnswersAnswerId(answer.getAnswerId());
+		
+		List<Answer> answers = new ArrayList<Answer>();
+		
+		if(incQuestion.getAnswers() != null){
+			for (Answer ans: incQuestion.getAnswers()){
+				if (ans.getAnswerId().equals(answer.getAnswerId())){
+					
+					Long savedVotes = (ans.getVotes() == null) ? 0L : ans.getVotes();				
+					
+					ans.setVotes(answer.getVotes());
+					
+					if (answer.getVotes() > savedVotes){
+						if (ans.getLikedByUserIDs() == null){
+							List<String> newUserList = new ArrayList<String>();
+							newUserList.add(userId);
+							ans.setLikedByUserIDs(newUserList);
+						}
+						else{
+							if (!ans.getLikedByUserIDs().contains(userId)){
+								ans.getLikedByUserIDs().add(userId);
+							}
+						}
+					} else{
+						//Remove userId from the list
+						if (ans.getLikedByUserIDs() != null && !ans.getLikedByUserIDs().isEmpty()){
+							ans.getLikedByUserIDs().remove(userId);
+						}
+					}
+				}
+				answers.add(ans);
+			}
+			
+			incQuestion.setAnswers(answers);
+		}
+		
+		
+		return qRepo.save(incQuestion);
+	}
 	
-	
-	//increment likes of a question
+	//increment/decrement likes of a question
 	public Question incrementLikes(Question question, String userId) {
 		// Find the question by given id.
 
@@ -362,6 +402,5 @@ public class QuestionService {
 
 		qRepo.save(question);
 	}
-
 
 }

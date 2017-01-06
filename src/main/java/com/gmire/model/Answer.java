@@ -10,13 +10,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Answer {
 
 	//TODO: Add timestamp to store time of answer.
-	
 	@Id
+	@JsonIgnore
 	private String id;
+	
+	private String answerId;
 
 	private String mainAnswer;
 
 	private Author author;
+	
+	private Long votes;
 
 	private Long weight;
 	
@@ -30,6 +34,16 @@ public class Answer {
 
 	//After review, the answer can be marked as verified. 
 	private boolean isVerifiedAnswer;
+
+	public Long getVotes() {
+		return votes;
+	}
+
+
+	public void setVotes(Long votes) {
+		this.votes = votes;
+	}
+
 
 	public boolean isLiked() {
 		return isLiked;
@@ -97,12 +111,12 @@ public class Answer {
 		this.author = author;
 	}
 
-	public String getId() {
-		return id;
+	public String getAnswerId() {
+		return answerId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setAnswerId(String id) {
+		this.answerId = id;
 	}
 
 	public String getMainAnswer() {
@@ -115,8 +129,8 @@ public class Answer {
 	}
 
 	public void checkAndPopulateId() {
-		if (id == null || id.equals("")) {
-			id = new ObjectId().toString();
+		if (answerId == null || answerId.equals("")) {
+			answerId = new ObjectId().toString();
 		}
 	}
 }

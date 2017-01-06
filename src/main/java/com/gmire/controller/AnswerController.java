@@ -89,7 +89,7 @@ public class AnswerController {
 	@RequestMapping(value = "/question/{questionid}/answers", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Question> updateAnswersForQuestionId(@PathVariable("questionid") String questionId, @RequestBody Answer answer) {
 
-		if (answer.getId() == null){
+		if (answer.getAnswerId() == null){
 			return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

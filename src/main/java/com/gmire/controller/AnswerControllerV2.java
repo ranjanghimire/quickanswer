@@ -28,6 +28,15 @@ public class AnswerControllerV2 {
 	@Autowired
 	AppUserRepository appUserRepository;
 	
+	//v2/answer/userid' + id
+	//Increment likes of answer
+	@RequestMapping(value="/v2/answer/userid/{userId}", method=RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Question> incrementAnswerLikes(@RequestBody Answer answer, @PathVariable("userId") String userId){
+		
+		Question incQuestion = questionService.incrementAnswerLikes(answer, userId);
+		
+		return new ResponseEntity<Question>(incQuestion, HttpStatus.OK);
+	}
 	
 	// Add to question's answerList when answer is submitted
 	//Also update the answerId to user's repliedAnswer list. 
@@ -40,7 +49,7 @@ public class AnswerControllerV2 {
 			if (updateQuestion == null)
 				return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
 			
-			populateAnswerIdIntoAppUser(answer.getId(), userId);
+			populateAnswerIdIntoAppUser(answer.getAnswerId(), userId);
 
 			return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
 		}
