@@ -118,6 +118,17 @@ public class QuestionService {
 	}
 
 	public Question addAnswersForQuestionId(String id, Answer answer) {
+		
+		//TODO: Split main asnswer to 'MainAnswer' and 'toUser'
+		//Save them separately.
+		
+		if (answer.getMainAnswer().startsWith("@")){
+			String arr[] = answer.getMainAnswer().split(" ", 2);
+			
+			answer.setToUser(arr[0]);
+			answer.setMainAnswer(arr[1]);
+		}
+		
 		Question questionPersisted = qRepo.findOne(id);
 		if (questionPersisted == null) {
 			return null;

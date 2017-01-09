@@ -20,6 +20,8 @@ public class Answer {
 
 	private Author author;
 	
+	private String toUser;
+	
 	private Long votes;
 
 	private Long weight;
@@ -34,6 +36,16 @@ public class Answer {
 
 	//After review, the answer can be marked as verified. 
 	private boolean isVerifiedAnswer;
+
+	public String getToUser() {
+		return toUser;
+	}
+
+
+	public void setToUser(String toUser) {
+		this.toUser = toUser;
+	}
+
 
 	public Long getVotes() {
 		return votes;
