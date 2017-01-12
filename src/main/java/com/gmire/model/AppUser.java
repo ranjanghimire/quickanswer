@@ -17,6 +17,8 @@ public class AppUser {
 	private String fullName;
 
 	private Address address;
+	
+	private List<Message> messages;
 
 	private List<String> askedQuestionsIDs;
 
@@ -41,8 +43,14 @@ public class AppUser {
 	// how many times this user has been vouched by others
 	private Long vouchCount;
 
-	
-	
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+
 	public String getPassword() {
 		return password;
 	}
