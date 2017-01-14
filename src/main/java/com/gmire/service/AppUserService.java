@@ -1,12 +1,15 @@
 package com.gmire.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gmire.model.AppUser;
+import com.gmire.model.Message;
 import com.gmire.repository.AppUserRepository;
 
 @Service
@@ -60,6 +63,14 @@ public class AppUserService {
 		
 		if (retUser == null){
 			return null;
+		}
+		
+		if (retUser.getMessages() != null && !retUser.getMessages().isEmpty()){
+			List<Message> messages = retUser.getMessages();
+
+			Collections.sort(messages, (Message a, Message b) -> b.getMessageTime().compareTo(a.getMessageTime()));
+			
+			retUser.setMessages(messages);
 		}
 		
 		return retUser;
