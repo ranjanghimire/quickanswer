@@ -463,4 +463,22 @@ public class QuestionService {
 		qRepo.save(question);
 	}
 
+	public List<Question> findByQuestionIds(String userId) {
+		
+		AppUser appUser = appUserService.findOneByUserId(userId);
+		
+		if (appUser == null){
+			return null;
+		}
+		
+		List<String> questionIds = appUser.getLikedIds();
+		
+		if (questionIds == null){
+			return null;
+		}
+		
+		List<Question> retQuestions = qRepo.findByIdIn(questionIds);
+		return retQuestions;
+	}
+
 }

@@ -233,6 +233,21 @@ public class QuestionControllerV2 {
 			return new ResponseEntity<Question> (question, HttpStatus.OK);
 		}
 		
+		//Find likes of giver user id
+		@RequestMapping(value="/v2/questions/likes/userid/{userId}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Question>> findByIds(@PathVariable("userId") String userId){
+			List<Question> retQuestions = questionService.findByQuestionIds(userId);
+			
+			if (retQuestions == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
+			
+			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
+			
+		}
+		
 		// Find all unanswered questions
 		@RequestMapping(value="/v2/question/unanswered/userid/{userId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Question>> findAllUnansweredQuestions(@PathVariable("userId") String userId) {
