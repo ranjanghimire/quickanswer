@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gmire.model.Answer;
+import com.gmire.model.AppUser;
 import com.gmire.model.Author;
 import com.gmire.model.Question;
 import com.gmire.repository.QuestionRepository;
@@ -24,6 +25,9 @@ public class QuestionService {
 
 	@Autowired
 	private AuthorService authorService;
+	
+	@Autowired
+	private AppUserService appUserService;
 
 	public List<Question> findByMainQuestionIgnoreCaseLike(String question) {
 		List<Question> retList = new ArrayList<Question>();
@@ -119,7 +123,7 @@ public class QuestionService {
 
 	public Question addAnswersForQuestionId(String id, Answer answer) {
 		
-		//TODO: Split main asnswer to 'MainAnswer' and 'toUser'
+		//Split main asnswer to 'MainAnswer' and 'toUser'
 		//Save them separately.
 		
 		if (answer.getMainAnswer().startsWith("@")){
@@ -294,8 +298,14 @@ public class QuestionService {
 								ans.getLikedByUserIDs().add(userId);
 							}
 						}
+						//Add questionId to AppUser's likedIds
+						addQuestionIdToUserLikedIdList(incQuestion.getId(), userId);
+						
 					} else{
 						//Remove userId from the list
+						//Remove questionID from AppUser's likedIds
+						removeQuestionIdFromUserLikedIdList(incQuestion.getId(), userId);
+						
 						if (ans.getLikedByUserIDs() != null && !ans.getLikedByUserIDs().isEmpty()){
 							ans.getLikedByUserIDs().remove(userId);
 						}
@@ -311,6 +321,41 @@ public class QuestionService {
 		return qRepo.save(incQuestion);
 	}
 	
+	//Internal method. Upon dislike, remove the question id from appuser likedIdlist
+	private void removeQuestionIdFromUserLikedIdList(String questionId, String userId){
+		
+		AppUser tmpUser = appUserService.findOneByUserId(userId);
+		
+		if(tmpUser.getLikedIds() != null){
+			if (tmpUser.getLikedIds().contains(questionId)){
+				tmpUser.getLikedIds().remove(questionId);
+				appUserService.update(tmpUser);
+			}
+		}
+		
+	}
+	
+	//Internal method. Upon question likes, the question id is populated in appuser likedIdlist
+	private void addQuestionIdToUserLikedIdList(String questionId, String userId) {
+		//Get AppUser by id
+		AppUser tmpUser = appUserService.findOneByUserId(userId);
+		
+		//If the LikedIdList is null, create new list and add questionId
+		if (tmpUser.getLikedIds() == null) {
+			//Create a new list and add it
+			List<String> tmpList = new ArrayList<String>();
+			tmpList.add(questionId);
+			tmpUser.setLikedIds(tmpList);
+		}
+		else{
+			//append the question id to the list
+			if(!tmpUser.getLikedIds().contains(questionId))
+				tmpUser.getLikedIds().add(questionId);
+		}
+		
+		appUserService.update(tmpUser);
+	}
+
 	//increment/decrement likes of a question
 	public Question incrementLikes(Question question, String userId) {
 		// Find the question by given id.
@@ -325,7 +370,6 @@ public class QuestionService {
 		}
 
 		// Add userId to the list likedByUserIDs.
-
 		if (question.getVotes() > savedVotes) {
 			if (incQuestion.getLikedByUserIDs() == null) {
 				List<String> newUserList = new ArrayList<String>();
@@ -335,8 +379,13 @@ public class QuestionService {
 				if (!incQuestion.getLikedByUserIDs().contains(userId))
 					incQuestion.getLikedByUserIDs().add(userId);
 			}
+			//Add the question id to AppUser's likedIds
+			addQuestionIdToUserLikedIdList(incQuestion.getId(), userId);
 		} else {
-			// Remove userId from the list
+			// Remove userId from the list likedByUserIDs
+			//Remove question id from AppUser's likedIds
+			removeQuestionIdFromUserLikedIdList(incQuestion.getId(), userId);
+			
 			if (incQuestion.getLikedByUserIDs() != null && !incQuestion.getLikedByUserIDs().isEmpty()) {
 				incQuestion.getLikedByUserIDs().remove(userId);
 			}

@@ -23,6 +23,8 @@ public class AppUser {
 	private List<String> askedQuestionsIDs;
 
 	private List<String> repliedAnswersIDs;
+	
+	private List<String> likedIds;
 
 	// users who have vouched this guy.
 	private List<AppUser> vouchedByUsers;
@@ -42,6 +44,15 @@ public class AppUser {
 
 	// how many times this user has been vouched by others
 	private Long vouchCount;
+	
+
+	public List<String> getLikedIds() {
+		return likedIds;
+	}
+
+	public void setLikedIds(List<String> likedIds) {
+		this.likedIds = likedIds;
+	}
 
 	public List<Message> getMessages() {
 		return messages;
