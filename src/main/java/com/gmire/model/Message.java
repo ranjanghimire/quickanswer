@@ -7,14 +7,29 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Message {
 	String fromUserName;
 	String fromUserId;
+	String toUserId;
+	String toUserName;
 	String mainMessage;
 	boolean isRead;
+	
 		
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	Date messageTime;
 	
 	String subject;
 	
+	public String getToUserId() {
+		return toUserId;
+	}
+	public void setToUserId(String toUserId) {
+		this.toUserId = toUserId;
+	}
+	public String getToUserName() {
+		return toUserName;
+	}
+	public void setToUserName(String toUserName) {
+		this.toUserName = toUserName;
+	}
 	public boolean isRead() {
 		return isRead;
 	}
