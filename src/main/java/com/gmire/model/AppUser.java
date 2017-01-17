@@ -15,6 +15,8 @@ public class AppUser {
 	private String password;
 
 	private String fullName;
+	
+	private String email;
 
 	private Address address;
 	
@@ -47,6 +49,14 @@ public class AppUser {
 	// how many times this user has been vouched by others
 	private Long vouchCount;
 	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public List<Message> getSentMessages() {
 		return sentMessages;
