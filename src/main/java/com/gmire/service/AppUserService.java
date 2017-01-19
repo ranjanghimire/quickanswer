@@ -95,8 +95,16 @@ public class AppUserService {
 
 		AppUser retUser = appUserRepository.findOne(id);
 		
-		if (retUser == null){ 
+		if (retUser == null){
 			return null;
+		}
+		
+		if (retUser.getMessages() != null && !retUser.getMessages().isEmpty()){
+			List<Message> messages = retUser.getMessages();
+
+			Collections.sort(messages, (Message a, Message b) -> b.getMessageTime().compareTo(a.getMessageTime()));
+			
+			retUser.setMessages(messages);
 		}
 		
 		return retUser;
