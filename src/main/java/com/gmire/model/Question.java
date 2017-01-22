@@ -23,6 +23,9 @@ public class Question {
 
 	private boolean isReported;
 	
+	//If the topic is followed by user, turn this flag on in DTO only
+	private boolean isFollowed;
+	
 	//Anytime the question is upvoted or viewed, etc., the weight goes up.
 	//Also, questions asked by higher weight user has higher weight. 
 	private Long weight;
@@ -51,6 +54,15 @@ public class Question {
 	// These are candidates for review and to set as hasVerifiedAnswer
 	private boolean hasAcceptedAnswer;
 	
+	
+	public boolean isFollowed() {
+		return isFollowed;
+	}
+
+	public void setFollowed(boolean isFollowed) {
+		this.isFollowed = isFollowed;
+	}
+
 	@JsonIgnore
 	public boolean isReported() {
 		return isReported;

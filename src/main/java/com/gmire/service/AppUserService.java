@@ -1,5 +1,7 @@
 package com.gmire.service;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,4 +112,72 @@ public class AppUserService {
 		return retUser;
 	}
 
+	//Update FollowedTopics in AppUser when someone follows a topic
+	//Also update that topic in the desired topic as well
+	//Should be able to remove as well
+	public AppUser followTopics(String userId, boolean followFlag, List<String> topicList) {
+		// TODO Use the followflag to remove/add
+		
+		//validate topicList
+		if (topicList== null || topicList.isEmpty()){
+			//return null so that error will be returned.
+			return null;
+		}
+		
+		AppUser appUser = appUserRepository.findOne(userId);
+		
+		//if appUser is null, return straightaway. 
+		if (appUser == null){
+			return null;
+		}
+		
+		//If only followFlag is true, add the topics, else remove
+		if (followFlag == true){
+			//If followedTopics is null, create new list and add
+			if (appUser.getFollowedTopics() == null){
+				appUser.setFollowedTopics(topicList);
+			}		
+			//else search if the topics already exist and append if not
+			else{
+				for (String topic: topicList){
+					if (!appUser.getFollowedTopics().contains(topic)){
+						appUser.getFollowedTopics().add(topic);
+					}
+				}
+			}
+		}
+		//If followFlag is false, remove the topics
+		else{
+			//If followedTopics is null, can't remove anything
+			if (appUser.getFollowedTopics() !=null && !appUser.getFollowedTopics().isEmpty()){
+				for(String topic: topicList){
+					if(appUser.getFollowedTopics().contains(topic)){
+						appUser.getFollowedTopics().remove(topic);
+					}
+				}
+			}
+		}
+		
+		//save this updated user and return
+		appUserRepository.save(appUser);
+		return appUser;
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

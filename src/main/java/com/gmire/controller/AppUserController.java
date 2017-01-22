@@ -98,6 +98,23 @@ public class AppUserController {
 		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
 	}
 	
+	//TODO: Update FollowedTopics in AppUser when someone follows a topic
+	//Also update that topic in the desired topic as well
+	//Should be able to remove as well
+	//Accept parameters: listOfTopics, userId, followFlag(true/false -> Add / Remove from list)
+	@RequestMapping(value="/user/userid/{userId}/follow/{flag}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppUser> followTopics(@PathVariable("userId") String userId, @PathVariable("flag") boolean followFlag, @RequestBody List<String> topicList){
+		
+		AppUser updateUser = appUserService.followTopics(userId, followFlag, topicList);
+		
+		if (updateUser == null) {
+			return new ResponseEntity<AppUser>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
+	}
+	
+	
+	
 	// Delete a User by id
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<AppUser> deleteUser(@PathVariable("id") String id) {

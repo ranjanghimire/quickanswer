@@ -338,6 +338,7 @@ public class QuestionControllerV2 {
 		}
 		
 		public List<Question> popuLateIsLiked(List<Question> retQuestions, String userId) {
+			//TODO: check if userId is null
 			
 			List<Question> que = new ArrayList<Question>();
 			
@@ -357,6 +358,18 @@ public class QuestionControllerV2 {
 								ans.setLiked(true);
 							}
 						}
+					}
+				}
+				
+				//populate ifFollowed flag for topic
+				if (q.getTopic() != null && q.getTopic() != ""){
+					//If User's followedTopics contains this question's topic, set followed flag to true
+					if (appUserService.findOneByUserId(userId).getFollowedTopics() != null
+							&& appUserService.findOneByUserId(userId).getFollowedTopics().contains(q.getTopic())){
+						q.setFollowed(true);
+					}
+					else{
+						q.setFollowed(false);
 					}
 				}
 				

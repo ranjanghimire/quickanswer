@@ -40,6 +40,9 @@ public class AppUser {
 
 	// All the topics he has liked, upvoted, etc.
 	private List<String> desiredTopics;
+	
+	//Topics he has explicitly followed
+	private List<String> followedTopics;
 
 	// Anytime a user is vouched, the weight goes up bigly.
 	// Anytime he answers a question, the weight goes up
@@ -49,6 +52,14 @@ public class AppUser {
 	// how many times this user has been vouched by others
 	private Long vouchCount;
 	
+
+	public List<String> getFollowedTopics() {
+		return followedTopics;
+	}
+
+	public void setFollowedTopics(List<String> followedTopics) {
+		this.followedTopics = followedTopics;
+	}
 
 	public String getEmail() {
 		return email;
