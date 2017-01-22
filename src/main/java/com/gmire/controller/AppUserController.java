@@ -98,7 +98,7 @@ public class AppUserController {
 		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
 	}
 	
-	//TODO: Update FollowedTopics in AppUser when someone follows a topic
+	//Update FollowedTopics in AppUser when someone follows a topic
 	//Also update that topic in the desired topic as well
 	//Should be able to remove as well
 	//Accept parameters: listOfTopics, userId, followFlag(true/false -> Add / Remove from list)
@@ -113,7 +113,20 @@ public class AppUserController {
 		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
 	}
 	
-	
+	//TODO: Bookmark a question
+	//Accept parameters: questionId, userId, bookmarkFlag
+	//Return AppUser
+	@RequestMapping(value="/user/userid/{userId}/questionid/{questionId}/bookmark/{flag}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<AppUser> bookmarkQuestion(@PathVariable("userId") String userId, 
+			@PathVariable("questionId") String questionId, @PathVariable("flag") boolean bookmarkFlag ){
+		
+		AppUser updateUser = appUserService.bookmarkQuestion(userId, questionId, bookmarkFlag);
+		
+		if (updateUser == null) {
+			return new ResponseEntity<AppUser>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
+	}
 	
 	// Delete a User by id
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)

@@ -285,6 +285,27 @@ public class QuestionControllerV2 {
 			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
 		}
 		
+		//Find all questions bookmarked by a given user
+		@RequestMapping(value="/v2/question/bookmarks/user/{userId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Question>> findAllQuestionsBookmarkedByThisUser(@PathVariable("userId") String userId){
+			AppUser appUser = appUserService.findOneByUserId(userId);
+			
+			if(appUser == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			List<Question> retQuestions = questionService.findByIdIn(appUser.getBookmarkedIDs());
+			
+			if (retQuestions == null){
+				return new ResponseEntity<List<Question>> (HttpStatus.NOT_FOUND);
+			}
+			
+			retQuestions = popuLateIsLiked(retQuestions, userId); 
+			
+			return new ResponseEntity<List<Question>>(retQuestions, HttpStatus.OK);
+			
+		}
+		
 		
 		//Find all questions that the user has replied to. Given appUserId. 
 		@RequestMapping(value = "/v2/question/answer/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -371,6 +392,16 @@ public class QuestionControllerV2 {
 					else{
 						q.setFollowed(false);
 					}
+				}
+				
+				//populate isBookmarked flag
+				//If the question id is in the appUser's bookmarkedIds list, set to true
+				if(appUserService.findOneByUserId(userId).getBookmarkedIDs() != null &&
+						appUserService.findOneByUserId(userId).getBookmarkedIDs().contains(q.getId())){
+					q.setBookmarked(true);
+				}
+				else{
+					q.setBookmarked(false);
 				}
 				
 				que.add(q);

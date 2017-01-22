@@ -42,6 +42,8 @@ public class Question {
 
 	private List<Address> relevantLocations;
 	
+	private boolean isBookmarked;
+	
 	private boolean isLiked;
 	
 	@JsonIgnore
@@ -55,6 +57,14 @@ public class Question {
 	private boolean hasAcceptedAnswer;
 	
 	
+	public boolean isBookmarked() {
+		return isBookmarked;
+	}
+
+	public void setBookmarked(boolean isBookmarked) {
+		this.isBookmarked = isBookmarked;
+	}
+
 	public boolean isFollowed() {
 		return isFollowed;
 	}

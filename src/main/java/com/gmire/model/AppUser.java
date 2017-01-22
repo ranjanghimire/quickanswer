@@ -28,6 +28,8 @@ public class AppUser {
 
 	private List<String> repliedAnswersIDs;
 	
+	private List<String> bookmarkedIDs;
+	
 	private List<String> likedIds;
 
 	// users who have vouched this guy.
@@ -52,6 +54,14 @@ public class AppUser {
 	// how many times this user has been vouched by others
 	private Long vouchCount;
 	
+
+	public List<String> getBookmarkedIDs() {
+		return bookmarkedIDs;
+	}
+
+	public void setBookmarkedIDs(List<String> bookmarkedIDs) {
+		this.bookmarkedIDs = bookmarkedIDs;
+	}
 
 	public List<String> getFollowedTopics() {
 		return followedTopics;

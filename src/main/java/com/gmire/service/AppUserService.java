@@ -1,10 +1,7 @@
 package com.gmire.service;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +113,6 @@ public class AppUserService {
 	//Also update that topic in the desired topic as well
 	//Should be able to remove as well
 	public AppUser followTopics(String userId, boolean followFlag, List<String> topicList) {
-		// TODO Use the followflag to remove/add
 		
 		//validate topicList
 		if (topicList== null || topicList.isEmpty()){
@@ -159,6 +155,58 @@ public class AppUserService {
 		}
 		
 		//save this updated user and return
+		appUserRepository.save(appUser);
+		return appUser;
+	}
+
+	public AppUser bookmarkQuestion(String userId, String questionId, boolean bookmarkFlag) {
+		// TODO Auto-generated method stub
+		// Validate input parameters
+		if (userId == null || userId.equals("") || questionId == null || questionId.equals("")){
+			return null;
+		}
+				
+		//Get the user from userId
+		AppUser appUser = appUserRepository.findOne(userId);
+		
+		//If user is null, return right away
+		if (appUser == null){
+			return null;
+		}
+		
+		//If bookmark flag is true, add the questionid to followedIDs list
+		if (bookmarkFlag == true){
+			//If bookmarkId list is null, create a new list and set
+			if (appUser.getBookmarkedIDs() == null){
+				
+				List<String> newList = new ArrayList<String>();
+				newList.add(questionId);
+				
+				appUser.setBookmarkedIDs(newList);
+			}
+			
+			//else search if the questionid already exists and add it if not
+			else{
+				if (!appUser.getBookmarkedIDs().contains(questionId)){
+					appUser.getBookmarkedIDs().add(questionId);
+				}
+			}
+		}
+		
+		
+		
+		//if bookmark flag is false, remove
+		else{
+			//If bookmarkedId list is null or empty, can't remove anything
+			if (appUser.getBookmarkedIDs() != null && !appUser.getBookmarkedIDs().isEmpty()){
+				if (appUser.getBookmarkedIDs().contains(questionId)){
+					appUser.getBookmarkedIDs().remove(questionId);
+				}
+			}
+		}
+		
+		//Save this updated user and return
+		
 		appUserRepository.save(appUser);
 		return appUser;
 	}
