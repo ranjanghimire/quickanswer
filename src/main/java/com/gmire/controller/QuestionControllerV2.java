@@ -361,6 +361,8 @@ public class QuestionControllerV2 {
 		public List<Question> popuLateIsLiked(List<Question> retQuestions, String userId) {
 			//TODO: check if userId is null
 			
+			AppUser tmpUser = appUserService.findOneByUserId(userId);
+			
 			List<Question> que = new ArrayList<Question>();
 			
 			//populate likes of question
@@ -385,8 +387,8 @@ public class QuestionControllerV2 {
 				//populate ifFollowed flag for topic
 				if (q.getTopic() != null && q.getTopic() != ""){
 					//If User's followedTopics contains this question's topic, set followed flag to true
-					if (appUserService.findOneByUserId(userId).getFollowedTopics() != null
-							&& appUserService.findOneByUserId(userId).getFollowedTopics().contains(q.getTopic())){
+					if (tmpUser.getFollowedTopics() != null
+							&& tmpUser.getFollowedTopics().contains(q.getTopic())){
 						q.setFollowed(true);
 					}
 					else{
@@ -396,8 +398,8 @@ public class QuestionControllerV2 {
 				
 				//populate isBookmarked flag
 				//If the question id is in the appUser's bookmarkedIds list, set to true
-				if(appUserService.findOneByUserId(userId).getBookmarkedIDs() != null &&
-						appUserService.findOneByUserId(userId).getBookmarkedIDs().contains(q.getId())){
+				if(tmpUser.getBookmarkedIDs() != null &&
+						tmpUser.getBookmarkedIDs().contains(q.getId())){
 					q.setBookmarked(true);
 				}
 				else{

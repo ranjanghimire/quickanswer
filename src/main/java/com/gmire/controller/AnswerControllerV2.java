@@ -17,6 +17,7 @@ import com.gmire.model.Answer;
 import com.gmire.model.AppUser;
 import com.gmire.model.Question;
 import com.gmire.repository.AppUserRepository;
+import com.gmire.service.NotificationService;
 import com.gmire.service.QuestionService;
 
 @RestController
@@ -27,6 +28,9 @@ public class AnswerControllerV2 {
 	
 	@Autowired
 	AppUserRepository appUserRepository;
+	
+	@Autowired
+	NotificationService notiService;
 	
 	//v2/answer/userid' + id
 	//Increment likes of answer
@@ -50,6 +54,10 @@ public class AnswerControllerV2 {
 				return new ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR);
 			
 			populateAnswerIdIntoAppUser(answer.getAnswerId(), userId);
+			
+			//Send notifications to the author and likedUsers
+			//Args: questionId, fromUserId, notiType, details
+			notiService.createNotification(id, userId, "answer", "");			
 
 			return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
 		}
