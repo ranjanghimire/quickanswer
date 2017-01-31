@@ -56,8 +56,8 @@ public class AnswerControllerV2 {
 			populateAnswerIdIntoAppUser(answer.getAnswerId(), userId);
 			
 			//Send notifications to the author and likedUsers
-			//Args: questionId, fromUserId, notiType, details
-			notiService.createNotification(id, userId, "answer", "");			
+			//Args: questionId, fromUserId, notiType
+			notiService.createNotification(id, userId, "answer");			
 
 			return new ResponseEntity<Question>(updateQuestion, HttpStatus.OK);
 		}

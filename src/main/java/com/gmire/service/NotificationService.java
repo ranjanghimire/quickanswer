@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.gmire.model.AppUser;
 import com.gmire.model.Notification;
 import com.gmire.model.Question;
 import com.gmire.repository.NotificationRepository;
@@ -26,9 +27,10 @@ public class NotificationService {
 	QuestionService qService;
 	
 	@Async
-	public void createNotification(String questionId, String userId, String notificationType, String details){
+	public void createNotification(String questionId, String userId, String notificationType){
 		
-		//TODO: 
+		AppUser appUser = appUserService.findOneByUserId(userId);
+		
 		//Get Question from questionId
 		Question question = qService.findById(questionId);
 		
@@ -36,6 +38,7 @@ public class NotificationService {
 		Notification notification = new Notification();
 		
 		notification.setFromUserId(userId);
+		notification.setFromUserName(appUser.getUserName());
 		notification.setNotificationType(notificationType);
 
 		List<String> toList = new ArrayList<String> ();
@@ -45,7 +48,7 @@ public class NotificationService {
 		
 		toList.add(question.getAuthor().getAppUserId());
 		
-		notification.setDetails(details);
+		notification.setQuestion(question);
 		notification.setNotificationTime(new Date());
 		
 		notification.setToUserId(toList);

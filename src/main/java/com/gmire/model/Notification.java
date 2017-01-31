@@ -15,20 +15,28 @@ public class Notification {
 	//e.g. message, like, replied, etc.
 	private String notificationType;
 	
-	//e.g. 'received', 'sent' (if messages)
-	private String details;
+	private Question question;
 	
 	//who to deliver
 	private List<String> toUserId;
 	
 	//action taken by
 	private String fromUserId;
+	private String fromUserName;
 	
 	private boolean isViewed;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date notificationTime;
 	
+	public String getFromUserName() {
+		return fromUserName;
+	}
+
+	public void setFromUserName(String fromUserName) {
+		this.fromUserName = fromUserName;
+	}
+
 	public boolean isViewed() {
 		return isViewed;
 	}
@@ -53,12 +61,12 @@ public class Notification {
 		this.notificationType = notificationType;
 	}
 
-	public String getDetails() {
-		return details;
+	public Question getQuestion() {
+		return question;
 	}
 
-	public void setDetails(String details) {
-		this.details = details;
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 	public List<String> getToUserId() {
