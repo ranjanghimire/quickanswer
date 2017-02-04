@@ -33,8 +33,8 @@ public class AppUserController {
 	
 	private static Logger LOG = LoggerFactory.getLogger(AppUserController.class);
 	
-	@Value("${spring.mail.username}")
-    private String fromEmail;
+	//@Value("${spring.mail.username}")
+    //private String fromEmail;
 
 	@Autowired
 	private AppUserService appUserService;
@@ -61,6 +61,7 @@ public class AppUserController {
 		
 		return new ResponseEntity<List<Notification>>(noti, HttpStatus.OK);
 	}
+	
 	
 	//Send email when 'Forgot Password'
 	@RequestMapping(value="/user/forgot/{email}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -89,6 +90,7 @@ public class AppUserController {
 		String text = "Your temporary code is: \"" + code + "\". Please enter it in the app to reset the password.";
 		
 		try{
+			String fromEmail = "temp@email.com";
 			emailService.sendNotification(fromEmail, email, subject, text);
 		}
 		catch(Exception e){
@@ -199,6 +201,18 @@ public class AppUserController {
 		}
 		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
 	}
+	
+	//Update read flag in Messages of a user
+	@RequestMapping(value="/user/userid/{id}/messageread/{flag}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AppUser> updateMessagesFlag(@PathVariable("id") String userId, @PathVariable("flag") boolean readFlag){
+		AppUser updateUser = appUserService.updateMessagestoRead(userId, readFlag);
+		
+		if (updateUser == null) {
+			return new ResponseEntity<AppUser>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<AppUser>(updateUser, HttpStatus.OK);
+	}
+	
 	
 	//Update FollowedTopics in AppUser when someone follows a topic
 	//Also update that topic in the desired topic as well

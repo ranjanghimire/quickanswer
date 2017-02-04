@@ -63,5 +63,9 @@ public class NotificationService {
 		
 		return notifications;
 	}
+	
+	public void deleteAll() {
+		notiRepo.deleteAll();
+	}
 
 }

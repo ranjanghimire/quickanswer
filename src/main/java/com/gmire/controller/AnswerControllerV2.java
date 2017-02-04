@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gmire.model.Answer;
 import com.gmire.model.AppUser;
+import com.gmire.model.Notification;
 import com.gmire.model.Question;
 import com.gmire.repository.AppUserRepository;
 import com.gmire.service.NotificationService;
@@ -81,6 +82,13 @@ public class AnswerControllerV2 {
 			// Save the appUser
 			appUserRepository.save(appUser);
 
+		}
+		
+		//delete all notifications
+		@RequestMapping(value = "/v2/notification", method = RequestMethod.DELETE)
+		public ResponseEntity<Notification> deleteAllNotifications() {
+			notiService.deleteAll();
+			return new ResponseEntity<Notification>(HttpStatus.NO_CONTENT);
 		}
 
 }

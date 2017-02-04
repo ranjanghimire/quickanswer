@@ -15,11 +15,11 @@ public class EmailService {
 
 	private static Logger LOG = LoggerFactory.getLogger(EmailService.class);
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
+	//@Autowired
+	//private JavaMailSender javaMailSender;
 	
 	@Async
-	public void sendNotification(String fromEmail, String toEmail, String subject, String text) throws MailException, InterruptedException {
+	public void sendNotification(String fromEmail, String toEmail, String subject, String text) {//throws MailException, InterruptedException {
 		
         LOG.info("Sending email to " + toEmail + "...");
         
@@ -28,7 +28,7 @@ public class EmailService {
 		mail.setFrom(fromEmail);
 		mail.setSubject(subject);
 		mail.setText(text);
-		javaMailSender.send(mail);
+		//javaMailSender.send(mail);
 		
 		LOG.info("Email Sent!");
 	}

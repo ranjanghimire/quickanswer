@@ -211,6 +211,32 @@ public class AppUserService {
 		return appUser;
 	}
 
+	public AppUser updateMessagestoRead(String userId, boolean readFlag) {
+
+		AppUser appUser = appUserRepository.findOne(userId);
+		
+		if (appUser == null){
+			return null;
+		}
+		
+		if (appUser.getMessages() == null || appUser.getMessages().isEmpty()){
+			return null;
+		}
+		
+		List<Message> tmpMsgs = new ArrayList<Message>();
+		
+		for (Message m: appUser.getMessages()){
+			m.setRead(readFlag);
+			tmpMsgs.add(m);			
+		}
+		
+		appUser.setMessages(tmpMsgs);
+		
+		appUserRepository.save(appUser);
+		
+		return appUser;
+	}
+
 }
 
 
